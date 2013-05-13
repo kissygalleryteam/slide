@@ -2,6 +2,8 @@
 
 KISSY.add("gallery/slide/1.1/index",function(S,BSlide){
 
+	BSlide.author = "bachi@taobao.com";
+
 	return BSlide;
 
 },{
