@@ -168,7 +168,7 @@ body {
 				<img class="pa sublayer1-1" src="http://img02.taobaocdn.com/tps/i2/T1c_41XudeXXa8YrnC-260-296.png" alt="sublayer" rel="alpha: false,slideindirection: top, offsetin:160,durationin: 1000,easingin:easeBoth">
 				<img class="pa sublayer1-2" src="http://img03.taobaocdn.com/tps/i3/T1MaX2XqxeXXa4cDZu-534-526.png" alt="sublayer" rel="alpha: false,slideindirection: top, offsetin:180,durationin: 2100,easingin:easeBoth">
 
-				<h1 class="pa sublayer1-3" alt="sublayer" rel="alpha: true,slideindirection: top, offsetin:130,durationin: 3300,easingin:elasticOut,delayin:700">
+				<h1 class="pa sublayer1-3" alt="sublayer" rel="alpha: true,slideindirection: top, offsetin:130,durationin: 3300,easingin:elasticOut,delayin:700, durationout:1000, slideoutdirection: left,offsetout:300,delayout:100">
 					LayerSlider
 				</h1>
 				<h2 class="pa sublayer1-4" alt="sublayer" rel="alpha: true,slideindirection: left, offsetin:400,durationin: 1500,easingin:backOut,delayin:1500">
@@ -224,7 +224,22 @@ body {
 
 
 <script>
-KISSY.use('gallery/slide/1.0/',function(S,Slide){
+    var S = KISSY;
+	var srcPath = "../../../";
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
+KISSY.use('gallery/slide/1.1/',function(S,Slide){
 	var C = new Slide('slides',{
 		autoSlide:false,
 		effect:'hSlide',
