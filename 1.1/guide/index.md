@@ -1,22 +1,17 @@
-## Demos
-
-- <a href="../demo/d1.html">Demo1</a>
-- <a href="../demo/d2.html">Demo2</a>
-- <a href="../demo/d3.html">Demo3</a>
-- <a href="../demo/d4.html">Demo4</a>
-- <a href="../demo/d5.html">Demo5</a>
-- <a href="../demo/d6.html">Demo6</a>
-- <a href="../demo/d7.html">Demo7</a>
-- <a href="../demo/d8.html">Demo8</a>
-- <a href="../demo/touch.html">Touch</a>
+Demo:<http://docs.kissyui.com/kissy-gallery/gallery/slide/1.0/index.html#api=useage.markdown.api>
 
 > 这是一个选项卡切换控件，基于KISSY 1.3.0，并针对移动终端（ios/Android）有简单的性能优化，动画流畅，支持基础的触屏事件。
+
+## v 1.1 changelog
+
+- 跳转延时
+- layerslide的退出动画
 
 ## 开始使用
 
 	<script>
 		// 回调传入了S（KISSY对象）和Slide构造器
-		KISSY.use('gallery/slide/1.1/',function(S,Slide){
+		KISSY.use('gallery/slide/1.0/',function(S,Slide){
 			// 这里可以调用Slide
 		});
 	</script>
@@ -59,7 +54,7 @@ Slide依赖典型的HTML结构
 
 这样来调用：
 
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 		var s = new Slide('JSlide');
 	});
 
@@ -116,6 +111,10 @@ Slide构造器第二个参数用以传入配置项，这些配置项为基础参
 <hr class="smooth" />
 
 ### 基本参数
+
+*triggerDelay* (Number)
+
+如果是触碰trigger触发切换，设置其延时，默认300（ms）
 
 *autoSlide* (Boolean)
 
@@ -344,7 +343,7 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 		new Slide('Jtab',{
 			eventType:'mouseenter' // 鼠标触碰切换
 		});
@@ -363,7 +362,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 
 		var s = new Slide('JSlide',{
 			eventType:'click',//点击触碰点切换
@@ -393,7 +392,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 		var C = new Slide('slides',{
 			autoSlide:true,
 			effect:'vSlide', //垂直切换
@@ -409,7 +408,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 		new Slide('JSlide',{
 			effect:'hSlide', //水平切换
 			carousel:true, //可以配置为跑马灯,也可以为false
@@ -468,7 +467,7 @@ HTML代码：
 JS 代码：
 
 	<script>
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.0/',function(S,Slide){
 		new Slide('slides',{
 			autoSlide:false,
 			effect:'hSlide',
@@ -495,3 +494,14 @@ JS 代码：
 - offsetin		进入动画的相对距离，默认为50
 - offsetout		移出动画的相对距离，默认为50
 
+### Demos
+
+- <a href="d1.html">Demo1</a>
+- <a href="d2.html">Demo2</a>
+- <a href="d3.html">Demo3</a>
+- <a href="d4.html">Demo4</a>
+- <a href="d5.html">Demo5</a>
+- <a href="d6.html">Demo6</a>
+- <a href="d7.html">Demo7</a>
+- <a href="d8.html">Demo8</a>
+- <a href="touch.html">Touch</a>

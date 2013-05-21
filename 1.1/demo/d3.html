@@ -31,7 +31,9 @@ body {
 	<div id="slides"><!--Slide控件开始-->
 		<div class="slides_container tab-content">
 			<div class="tab-pannel">
-				<img src="http://jayli.github.com/gallery/yuislide/assets/slide-1.jpg">
+				<a href="#" onclick="alert(222)">
+					<img src="http://jayli.github.com/gallery/yuislide/assets/slide-1.jpg">
+				</a>
 			</div>
 			<div class="tab-pannel">
 				<img src="http://jayli.github.com/gallery/yuislide/assets/slide-2.jpg">
@@ -75,12 +77,31 @@ body {
 	<img src="http://jayli.github.com/gallery/yuislide/assets/example-frame.png" width="739" height="341" alt="Example Frame" id="frame">
 </div>
 
-<script>KISSY.use('gallery/slide/1.0/',function(S,Slide){
+<script>
+    var S = KISSY;
+	var srcPath = "../../../";
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
+	
+KISSY.use('gallery/slide/1.1/index',function(S,Slide){
 	var C = new Slide('slides',{
 		autoSlide:true,
-		effect:'vSlide',
+		effect:'hSlide',
 		timeout:3000,
 		speed:700,
+		eventType:'mouseover',
+		triggerDelay:400,
 		selectedClass:'current',
 	//	carousel:true,
 		touchmove:true
@@ -92,6 +113,9 @@ body {
 	S.one('#J_next').on('click',function(e){
 		e.halt();
 		C.next();
+	});
+	S.all('#slides img').on('click',function(){
+		// alert(22);	
 	});
 
 });</script>
