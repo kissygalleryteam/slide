@@ -231,7 +231,7 @@ KISSY.add('gallery/slide/1.1/kissy2yui',function(S){
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add("gallery/slide/1.1/base",function(S){
+KISSY.add('gallery/slide/1.1/base',function(S){
 
 	"use strict";
 
@@ -824,6 +824,58 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 			return wrappedIndex;
 		},
 
+		getMousePosition:function(){
+			var self = this;
+			var domousemove = function(e){
+				self._t_mouseX = e.clientX;
+				self._t_mouseY = e.clientY;
+			};
+			S.Event.on(window,'mousemove',domousemove);
+			setTimeout(function(){
+				S.Event.detach(window,'mouseover',domousemove);
+			},self.triggerDelay);
+		},
+		// 大量触碰事件的处理，带上延时的过滤，防止频繁处理切换
+		massTrigger:function(cb,el){
+			var self = this;
+			if(!S.inArray(self.eventType,['mouseover','mouseenter'])){
+				cb();
+				return;
+			}
+			self.getMousePosition();
+			if(S.isUndefined(self._fired) || S.isNull(self._fired)){
+				self._fired = setTimeout(function(){
+					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
+						cb();	
+					}
+					self._fired = null;
+				},self.triggerDelay);
+			} else {
+				clearTimeout(self._fired);
+				self._fired = setTimeout(function(){
+					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
+						cb();	
+					}
+					self._fired = null;
+				},self.triggerDelay);
+			}
+
+		},
+
+		// 判断一个点是否在某个区域内
+		inRegion:function(point,el){
+			var offset = el.offset();
+			var layout = {
+				width:el.width(),
+				height:el.height()
+			};
+			if(point[0] >= offset.left && point[0] <= offset.left + layout.width){
+				if(point[1] >= offset.top && point[1] <= offset.top + layout.height){
+					return true;
+				}
+			}
+			return false;
+		},
 
 		// 绑定默认事件
 		bindEvent:function(){
@@ -831,14 +883,16 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 			if(	S.inArray(self.eventType,['click','mouseover','mouseenter'] )) {
 				self.con._delegate(self.eventType,function(e){
 					e.halt();
-					var ti = Number(self.tabs.indexOf(e.currentTarget));
-					if(self.carousel){
-						ti = (ti + 1) % self.length;
-					}
-					self.go(ti);
-					if(self.autoSlide){
-						self.stop().play();
-					}
+					self.massTrigger(function(){
+						var ti = Number(self.tabs.indexOf(e.currentTarget));
+						if(self.carousel){
+							ti = (ti + 1) % self.length;
+						}
+						self.go(ti);
+						if(self.autoSlide){
+							self.stop().play();
+						}
+					},e.currentTarget);
 				},'.'+self.navClass+' '+self.triggerSelector);
 			}
 
@@ -1128,7 +1182,6 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 				"alpha":				true,	
 				"offsetin":				50,	
 				"offsetout":			50
-
 			};
 
 			// SubLayer 构造器,传入单个el，生成SubLayer对象
@@ -1293,6 +1346,7 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
 			self.on('beforeTailSwitch',function(o){
 				self.subLayerRunout(o.index);	
+				// 同时，返回需要delay的最长时间
 			});
 
 		},
@@ -1364,7 +1418,8 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 				layerClass:		'tab-animlayer',
 				colspan:		1,
 				animWrapperAutoHeightSetting:true,// beforeSwitch不修改wrappercon 宽高
-				webkitOptimize	:true
+				webkitOptimize	:true,
+				triggerDelay:	300 	// added by jayli 2013-05-21，触碰延时
 				
 			},setParam);
 
@@ -1597,6 +1652,11 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 			var self = this;
 			//首先高亮显示tab
 
+			if(!S.isUndefined(callback) && callback === false){
+				var effect = false;
+			} else {
+				var effect = true;
+			}
 
 			var afterSwitch = function(){
 				if(S.isFunction(callback)){
@@ -1610,7 +1670,8 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 			};
 			
 
-			self.fire('beforeTailSwitch',{
+			// tailSwitch 是秒数
+			var tailSwitch = self.fire('beforeTailSwitch',{
                 index: self.currentTab,
                 navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
                 pannelnode: self.pannels.item(self.currentTab)
@@ -1657,13 +1718,13 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': self.speed + 's',
+							'-webkit-transition-duration': effect ? self.speed : '0' + 's',
 							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
 						self.anim = S.Anim(self.animwrap,{
 							opacity:1
-						},self.speed,self.easing,function(){
+						},effect ? self.speed : 0.01,self.easing,function(){
 							afterSwitch();
 						});
 						self.anim.run();
@@ -1679,12 +1740,19 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 						});
 						self.anim.run();
 						*/
-						self.anim = S.Anim(self.animwrap,{
-							top: -1 * index * self.animcon.get('region').height / self.colspan
-						},self.speed,self.easing,function(){
+						if(effect){
+							self.anim = S.Anim(self.animwrap,{
+								top: -1 * index * self.animcon.get('region').height / self.colspan
+							},self.speed,self.easing,function(){
+								afterSwitch();
+							});
+							self.anim.run();
+						} else {
+							self.animwrap.css({
+								top: -1 * index * self.animcon.get('region').height / self.colspan
+							});
 							afterSwitch();
-						});
-						self.anim.run();
+						}
 					}
 
 				},
@@ -1692,25 +1760,32 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': self.speed + 's',
+							'-webkit-transition-duration': effect ? self.speed : '0' + 's',
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
 						self.anim = S.Anim(self.animwrap,{
 							opacity:1
-						},self.speed,self.easing,function(){
+						},effect ? self.speed : 0.01,self.easing,function(){
 							afterSwitch();
 						});
 						self.anim.run();
 					}else{
 
-						self.anim = S.Anim(self.animwrap,{
-							left: -1 * index * self.animcon.get('region').width / self.colspan
-						},self.speed,self.easing,function(){
-							afterSwitch();
-						});
+						if(effect){
+							self.anim = S.Anim(self.animwrap,{
+								left: -1 * index * self.animcon.get('region').width / self.colspan
+							},self.speed,self.easing,function(){
+								afterSwitch();
+							});
 
-						self.anim.run();
+							self.anim.run();
+						} else {
+							self.animwrap.css({
+								top: -1 * index * self.animcon.get('region').height / self.colspan
+							});
+							afterSwitch();
+						}
 					}
 
 				},
@@ -1721,7 +1796,7 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
 					self.anim = S.Anim(self.pannels.item(index),{
 						opacity: 1
-					},self.speed,self.easing,function(){
+					},effect ? self.speed : 0.01,self.easing,function(){
 
 						self.pannels.item(_curr).setStyle('zIndex', 0);
 						self.pannels.item(index).setStyle('zIndex', 1);
@@ -1757,20 +1832,32 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
             self.currentTab = index;
 
-			// TODO，讨论switch的发生时机
-            self.fire('switch', {
-                index: index,
-                navnode: self.tabs.item(self.getWrappedIndex(index)),
-                pannelnode: self.pannels.item(index)
-            });
-
-			//延迟执行的脚本
-			var scriptsArea = self.pannels.item(index).all('.data-lazyload');
-			if(scriptsArea){
-				scriptsArea.each(function(node,i){
-					self.renderLazyData(node);
-				});
+			if(S.isNumber(tailSwitch)){
+				setTimeout(function(){
+					doSwitch();
+				},tailSwitch);
+			} else {
+				doSwitch();
 			}
+
+			function doSwitch(){
+				// TODO，讨论switch的发生时机
+				self.fire('switch', {
+					index: index,
+					navnode: self.tabs.item(self.getWrappedIndex(index)),
+					pannelnode: self.pannels.item(index)
+				});
+
+				//延迟执行的脚本
+				var scriptsArea = self.pannels.item(index).all('.data-lazyload');
+				if(scriptsArea){
+					scriptsArea.each(function(node,i){
+						self.renderLazyData(node);
+					});
+				}
+
+			}
+
 		},
 		//去往任意一个,0,1,2,3...
 		"go":function(index,callback){
@@ -1833,9 +1920,7 @@ KISSY.add("gallery/slide/1.1/base",function(S){
 
 
 
-KISSY.add("gallery/slide/1.1/index",function(S,BSlide){
-
-	BSlide.author = "bachi@taobao.com";
+KISSY.add('gallery/slide/1.1/index',function(S,BSlide){
 
 	return BSlide;
 
