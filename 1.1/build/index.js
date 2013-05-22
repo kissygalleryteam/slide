@@ -118,7 +118,8 @@ KISSY.add('gallery/slide/1.1/slide-util',function(S){
 	requires:[
 		'node',
 		'sizzle',
-		'json'
+		'json',
+		'event'
 	]	
 });
 
@@ -1068,7 +1069,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						if(!self.isScrolling){
 
 							// 阻止默认上下滑动事件
-							e.halt();
+							e.preventDefault();
 
 							self.stop();
 							var width = Number(self.animcon.get('region').width / self.colspan);
@@ -1650,12 +1651,12 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 		//切换至index,这里的index为真实的索引
 		switch_to:function(index,callback){
 			var self = this;
-			//首先高亮显示tab
 
+			// 切换是否强制取消动画
 			if(!S.isUndefined(callback) && callback === false){
-				var effect = false;
+				var doeffect = false;
 			} else {
-				var effect = true;
+				var doeffect = true;
 			}
 
 			var afterSwitch = function(){
@@ -1718,13 +1719,13 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': effect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
 							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
 						self.anim = S.Anim(self.animwrap,{
 							opacity:1
-						},effect ? self.speed : 0.01,self.easing,function(){
+						},doeffect ? self.speed : 0.01,self.easing,function(){
 							afterSwitch();
 						});
 						self.anim.run();
@@ -1740,7 +1741,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						});
 						self.anim.run();
 						*/
-						if(effect){
+						if(doeffect){
 							self.anim = S.Anim(self.animwrap,{
 								top: -1 * index * self.animcon.get('region').height / self.colspan
 							},self.speed,self.easing,function(){
@@ -1760,19 +1761,19 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': effect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
 						self.anim = S.Anim(self.animwrap,{
 							opacity:1
-						},effect ? self.speed : 0.01,self.easing,function(){
+						},doeffect ? self.speed : 0.01,self.easing,function(){
 							afterSwitch();
 						});
 						self.anim.run();
 					}else{
 
-						if(effect){
+						if(doeffect){
 							self.anim = S.Anim(self.animwrap,{
 								left: -1 * index * self.animcon.get('region').width / self.colspan
 							},self.speed,self.easing,function(){
@@ -1782,7 +1783,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							self.anim.run();
 						} else {
 							self.animwrap.css({
-								top: -1 * index * self.animcon.get('region').height / self.colspan
+								left: -1 * index * self.animcon.get('region').width / self.colspan
 							});
 							afterSwitch();
 						}
@@ -1796,7 +1797,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					self.anim = S.Anim(self.pannels.item(index),{
 						opacity: 1
-					},effect ? self.speed : 0.01,self.easing,function(){
+					},doeffect ? self.speed : 0.01,self.easing,function(){
 
 						self.pannels.item(_curr).setStyle('zIndex', 0);
 						self.pannels.item(index).setStyle('zIndex', 1);
@@ -1828,19 +1829,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 			};
 
-			animFn[self.effect](index);
+			var doSwitch = function(){
 
-            self.currentTab = index;
+				animFn[self.effect](index);
 
-			if(S.isNumber(tailSwitch)){
-				setTimeout(function(){
-					doSwitch();
-				},tailSwitch);
-			} else {
-				doSwitch();
-			}
-
-			function doSwitch(){
+				self.currentTab = index;
 				// TODO，讨论switch的发生时机
 				self.fire('switch', {
 					index: index,
@@ -1856,7 +1849,16 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					});
 				}
 
+			};
+
+			if(S.isNumber(tailSwitch)){
+				setTimeout(function(){
+					doSwitch();
+				},tailSwitch);
+			} else {
+				doSwitch();
 			}
+
 
 		},
 		//去往任意一个,0,1,2,3...
