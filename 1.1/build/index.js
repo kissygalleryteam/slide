@@ -1069,7 +1069,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						if(!self.isScrolling){
 
 							// 阻止默认上下滑动事件
-							e.preventDefault();
+							e.halt();
 
 							self.stop();
 							var width = Number(self.animcon.get('region').width / self.colspan);
@@ -1653,7 +1653,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			var self = this;
 
 			// 切换是否强制取消动画
-			if(!S.isUndefined(callback) && callback === false){
+			if(callback === false){
 				var doeffect = false;
 			} else {
 				var doeffect = true;
