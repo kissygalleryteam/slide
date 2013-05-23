@@ -640,6 +640,20 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 		},
 
+		// 获取当前subLayer退出动画的delay最大值、
+		getMaxAnimDelay: function(index) {
+			var self = this,
+				max = 0;
+
+			S.each(self.sublayers[index], function(sublayer) {
+				if (sublayer.durationout + sublayer.delayout > max) {
+					max = sublayer.durationout + sublayer.delayout;
+				}
+			});
+
+			return max;
+		},
+
 		// 判断一个点是否在某个区域内
 		inRegion:function(point,el){
 			var offset = el.offset();
@@ -1086,6 +1100,85 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				};
 				// TODO 仿效animIn来实现
 				this.animOut = function(){
+					var that = this;
+
+					// 记录退出偏移量和退出方向
+					var offsetOut = that.offsetout;
+					var outType = that.slideoutdirection;
+
+					// 动画开始之前的预处理
+					var prepareEl = {
+						left:function(){
+								 that.el.css({
+									 'left':that.left-offsetOut
+								 });
+							 },
+						top:function(){
+								that.el.css({
+									'top':that.top-offsetOut
+								});
+							},
+						right:function(){
+								  that.el.css({
+									  'left':that.left+offsetOut
+								  });
+							  },
+						bottom:function(){
+								   that.el.css({
+									   'top':that.top+offsetOut
+								   });
+							   }
+					};
+
+					//prepareEl[outType]();
+
+					setTimeout(function(){
+
+
+						var SlideOutEffectTo = {
+							left:	{
+										left:that.left - offsetOut
+									},
+							top:	{
+										top:that.top + offsetOut
+									},
+							bottom:	{
+										top:that.top - offsetOut,
+									},
+							right:	{
+										left:that.left + offsetOut
+									}
+						};
+
+
+
+						// 动画结束的属性
+						var to = {};
+
+						S.mix(to,SlideOutEffectTo[outType]);
+
+						// 如果开启alpha，则从透明动画到不透明
+						if(that.alpha){
+							S.mix(to,{
+								opacity:0	
+							});
+						}
+
+
+						// 执行动画
+						S.Anim(that.el,to,that.durationout/1000,that.easingout,function(){
+							// TODO 动画结束后的回调事件
+							// 寻找最后的动画结束时间
+						}).run();
+						
+					},that.delayout);
+					/*
+					if(that.alpha){
+						that.el.css({
+							opacity:0	
+						});
+					}
+					*/
 
 				};
 
@@ -1116,6 +1209,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			});
 
 			self.on('beforeSwitch',function(o){
+				console.log('run sublayer');
 				if(o.index === self.currentTab){
 					return false;
 				}
@@ -1449,11 +1543,15 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			
 
 			// tailSwitch 是秒数
-			var tailSwitch = self.fire('beforeTailSwitch',{
-                index: self.currentTab,
-                navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
-                pannelnode: self.pannels.item(self.currentTab)
-			});
+			var tailSwitch = function() {
+				self.fire('beforeTailSwitch',{
+					index: self.currentTab,
+					navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
+					pannelnode: self.pannels.item(self.currentTab)
+				});
+
+				return self.getMaxAnimDelay(self.currentTab);
+			};
 
 			self.hightlightNav(self.getWrappedIndex(index));
 			self.fixSlideSize(index);
@@ -1628,10 +1726,13 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 			};
 
-			if(S.isNumber(tailSwitch)){
+			//doSwitch();
+
+			var delay = tailSwitch();
+			if(S.isNumber(delay)){
 				setTimeout(function(){
 					doSwitch();
-				},tailSwitch);
+				},delay);
 			} else {
 				doSwitch();
 			}
