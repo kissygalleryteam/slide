@@ -645,6 +645,10 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			var self = this,
 				max = 0;
 
+			if (!self.sublayers) {
+				return;
+			}
+
 			S.each(self.sublayers[index], function(sublayer) {
 				if (sublayer.durationout + sublayer.delayout > max) {
 					max = sublayer.durationout + sublayer.delayout;
@@ -1110,43 +1114,41 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					var prepareEl = {
 						left:function(){
 								 that.el.css({
-									 'left':that.left-offsetOut
+									 'left':that.left
 								 });
 							 },
 						top:function(){
 								that.el.css({
-									'top':that.top-offsetOut
+									'top':that.top
 								});
 							},
 						right:function(){
 								  that.el.css({
-									  'left':that.left+offsetOut
+									  'left':that.left
 								  });
 							  },
 						bottom:function(){
 								   that.el.css({
-									   'top':that.top+offsetOut
+									   'top':that.top
 								   });
 							   }
 					};
 
-					//prepareEl[outType]();
+					prepareEl[outType]();
 
 					setTimeout(function(){
-
-
 						var SlideOutEffectTo = {
 							left:	{
-										left:that.left - offsetOut
+										left:that.left + offsetOut
 									},
 							top:	{
 										top:that.top + offsetOut
 									},
 							bottom:	{
-										top:that.top - offsetOut,
+										top:that.top - offsetOut
 									},
 							right:	{
-										left:that.left + offsetOut
+										left:that.left - offsetOut
 									}
 						};
 
@@ -1172,13 +1174,12 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						}).run();
 						
 					},that.delayout);
-					/*
+					
 					if(that.alpha){
 						that.el.css({
-							opacity:0	
+							opacity:1
 						});
 					}
-					*/
 
 				};
 
@@ -1209,7 +1210,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			});
 
 			self.on('beforeSwitch',function(o){
-				console.log('run sublayer');
 				if(o.index === self.currentTab){
 					return false;
 				}
@@ -1217,8 +1217,14 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			});
 
 			self.on('beforeTailSwitch',function(o){
+				if(self.isTailSwitching === true) {
+					return false;
+				}
+
+				self.isTailSwitching = true;
 				self.subLayerRunout(o.index);	
 				// 同时，返回需要delay的最长时间
+				return self.getMaxAnimDelay(o.index);
 			});
 
 		},
@@ -1425,6 +1431,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				}
 			}catch(e){}
 			var _index = self.currentTab+1;
+			console.log(self.pannels);
 			if(_index >= (self.length - self.colspan + 1)){
 				_index = _index % (self.length - self.colspan + 1);
 			}
@@ -1543,15 +1550,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			
 
 			// tailSwitch 是秒数
-			var tailSwitch = function() {
-				self.fire('beforeTailSwitch',{
-					index: self.currentTab,
-					navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
-					pannelnode: self.pannels.item(self.currentTab)
-				});
-
-				return self.getMaxAnimDelay(self.currentTab);
-			};
+			var tailSwitch = self.fire('beforeTailSwitch',{
+				index: self.currentTab,
+				navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
+				pannelnode: self.pannels.item(self.currentTab)
+			});
 
 			self.hightlightNav(self.getWrappedIndex(index));
 			self.fixSlideSize(index);
@@ -1594,7 +1597,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
 							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
@@ -1635,8 +1638,9 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				'hSlide':function(index){
 
 					if(self.transitions){
+
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
@@ -1705,36 +1709,48 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			};
 
 			var doSwitch = function(){
-
-				animFn[self.effect](index);
-
-				self.currentTab = index;
-				// TODO，讨论switch的发生时机
-				self.fire('switch', {
-					index: index,
-					navnode: self.tabs.item(self.getWrappedIndex(index)),
-					pannelnode: self.pannels.item(index)
+				
+				var goon = self.fire('beforeSwitch', {
+					index:index,
+					navnode:self.tabs.item(index),
+					pannelnode:self.pannels.item(index)
 				});
 
-				//延迟执行的脚本
-				var scriptsArea = self.pannels.item(index).all('.data-lazyload');
-				if(scriptsArea){
-					scriptsArea.each(function(node,i){
-						self.renderLazyData(node);
-					});
-				}
+				if(goon !== false){
+					//发生go的时候首先判断是否需要整理空间的长宽尺寸
+					//self.renderSize(index);
 
+					if(index + self.colspan > self.pannels.size()){
+						index = self.pannels.size() - self.colspan;
+					}
+					animFn[self.effect](index);
+
+					self.currentTab = index;
+					// TODO，讨论switch的发生时机
+					self.fire('switch', {
+						index: index,
+						navnode: self.tabs.item(self.getWrappedIndex(index)),
+						pannelnode: self.pannels.item(index)
+					});
+
+					//延迟执行的脚本
+					var scriptsArea = self.pannels.item(index).all('.data-lazyload');
+					if(scriptsArea){
+						scriptsArea.each(function(node,i){
+							self.renderLazyData(node);
+						});
+					}
+				}
 			};
 
-			//doSwitch();
-
-			var delay = tailSwitch();
-			if(S.isNumber(delay)){
+			if(S.isNumber(tailSwitch)){
 				setTimeout(function(){
 					doSwitch();
-				},delay);
-			} else {
+					self.isTailSwitching = false;
+				},tailSwitch);
+			} else if(tailSwitch !== false){
 				doSwitch();
+				self.isTailSwitching = false;
 			}
 
 
@@ -1743,6 +1759,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 		"go":function(index,callback){
 			var self = this;
 
+			/*
             var goon = self.fire('beforeSwitch', {
 				index:index,
 				navnode:self.tabs.item(index),
@@ -1757,7 +1774,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					index = self.pannels.size() - self.colspan;
 				}
 				self.switch_to(index,callback);
-			}
+			}*/
+			self.switch_to(index,callback);
 
 			// TODO 讨论afterSwitch的发生时机
 			/*
