@@ -30,7 +30,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 	// TODO 抽离切换“机制”和实现的方法
 	BSlide.plug = function(fn){
-
+		var self = this;
 	};
 
 	// 扩充BSlide
