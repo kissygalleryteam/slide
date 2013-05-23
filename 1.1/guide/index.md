@@ -289,7 +289,9 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 *go(index,callback)*
 
-跳转到指定索引的帧，参数为index:0,1,2,3...，callback为切换完毕后的回调
+跳转到指定索引的帧，参数为index:0,1,2,3...，callback为切换完毕后的回调；若callback为false，表示直接切换，无动画，比如
+
+	slide.go(2,false);
 
 *add(node,index)*
 

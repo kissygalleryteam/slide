@@ -47,7 +47,26 @@
 	<button class="stop" title="Stop"></button>
 </div>
 
-<script>KISSY.use('gallery/slide/1.0/',function(S,Slide){
+<script>
+	
+	
+    var S = KISSY;
+	var srcPath = "../../../";
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
+
+KISSY.use('gallery/slide/1.1/',function(S,Slide){
 	var s = new Slide('JSlide',{
 		eventType:'click',
 		navClass:'scrollable-trigger',
