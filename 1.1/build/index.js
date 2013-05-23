@@ -1719,7 +1719,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
 							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
@@ -1761,7 +1761,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 					if(self.transitions){
 						self.animwrap.setStyles({
-							'-webkit-transition-duration': doeffect ? self.speed : '0' + 's',
+							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
