@@ -642,6 +642,24 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 		},
 
+		// 获取当前subLayer退出动画的delay最大值、
+		getMaxAnimDelay: function(index) {
+			var self = this,
+				max = 0;
+
+			if (!self.sublayers) {
+				return;
+			}
+
+			S.each(self.sublayers[index], function(sublayer) {
+				if (sublayer.durationout + sublayer.delayout > max) {
+					max = sublayer.durationout + sublayer.delayout;
+				}
+			});
+
+			return max;
+		},
+
 		// 判断一个点是否在某个区域内
 		inRegion:function(point,el){
 			var offset = el.offset();
@@ -1088,6 +1106,82 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				};
 				// TODO 仿效animIn来实现
 				this.animOut = function(){
+					var that = this;
+
+					// 记录退出偏移量和退出方向
+					var offsetOut = that.offsetout;
+					var outType = that.slideoutdirection;
+
+					// 动画开始之前的预处理
+					var prepareEl = {
+						left:function(){
+								 that.el.css({
+									 'left':that.left
+								 });
+							 },
+						top:function(){
+								that.el.css({
+									'top':that.top
+								});
+							},
+						right:function(){
+								  that.el.css({
+									  'left':that.left
+								  });
+							  },
+						bottom:function(){
+								   that.el.css({
+									   'top':that.top
+								   });
+							   }
+					};
+
+					prepareEl[outType]();
+
+					setTimeout(function(){
+						var SlideOutEffectTo = {
+							left:	{
+										left:that.left + offsetOut
+									},
+							top:	{
+										top:that.top + offsetOut
+									},
+							bottom:	{
+										top:that.top - offsetOut
+									},
+							right:	{
+										left:that.left - offsetOut
+									}
+						};
+
+
+
+						// 动画结束的属性
+						var to = {};
+
+						S.mix(to,SlideOutEffectTo[outType]);
+
+						// 如果开启alpha，则从透明动画到不透明
+						if(that.alpha){
+							S.mix(to,{
+								opacity:0	
+							});
+						}
+
+
+						// 执行动画
+						S.Anim(that.el,to,that.durationout/1000,that.easingout,function(){
+							// TODO 动画结束后的回调事件
+							// 寻找最后的动画结束时间
+						}).run();
+						
+					},that.delayout);
+					
+					if(that.alpha){
+						that.el.css({
+							opacity:1
+						});
+					}
 
 				};
 
@@ -1125,8 +1219,14 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			});
 
 			self.on('beforeTailSwitch',function(o){
+				//if(self.isTailSwitching === true) {
+				//	return false;
+				//}
+
+				//self.isTailSwitching = true;
 				self.subLayerRunout(o.index);	
 				// 同时，返回需要delay的最长时间
+				return self.getMaxAnimDelay(o.index);
 			});
 
 		},
@@ -1333,6 +1433,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				}
 			}catch(e){}
 			var _index = self.currentTab+1;
+			console.log(self.pannels);
 			if(_index >= (self.length - self.colspan + 1)){
 				_index = _index % (self.length - self.colspan + 1);
 			}
@@ -1452,9 +1553,9 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 			// tailSwitch 是秒数
 			var tailSwitch = self.fire('beforeTailSwitch',{
-                index: self.currentTab,
-                navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
-                pannelnode: self.pannels.item(self.currentTab)
+				index: self.currentTab,
+				navnode: self.tabs.item(self.getWrappedIndex(self.currentTab)),
+				pannelnode: self.pannels.item(self.currentTab)
 			});
 
 			self.hightlightNav(self.getWrappedIndex(index));
@@ -1539,6 +1640,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				'hSlide':function(index){
 
 					if(self.transitions){
+
 						self.animwrap.setStyles({
 							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
@@ -1609,33 +1711,48 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			};
 
 			var doSwitch = function(){
-
-				animFn[self.effect](index);
-
-				self.currentTab = index;
-				// TODO，讨论switch的发生时机
-				self.fire('switch', {
-					index: index,
-					navnode: self.tabs.item(self.getWrappedIndex(index)),
-					pannelnode: self.pannels.item(index)
+				
+				var goon = self.fire('beforeSwitch', {
+					index:index,
+					navnode:self.tabs.item(index),
+					pannelnode:self.pannels.item(index)
 				});
 
-				//延迟执行的脚本
-				var scriptsArea = self.pannels.item(index).all('.data-lazyload');
-				if(scriptsArea){
-					scriptsArea.each(function(node,i){
-						self.renderLazyData(node);
-					});
-				}
+				if(goon !== false){
+					//发生go的时候首先判断是否需要整理空间的长宽尺寸
+					//self.renderSize(index);
 
+					if(index + self.colspan > self.pannels.size()){
+						index = self.pannels.size() - self.colspan;
+					}
+					animFn[self.effect](index);
+
+					self.currentTab = index;
+					// TODO，讨论switch的发生时机
+					self.fire('switch', {
+						index: index,
+						navnode: self.tabs.item(self.getWrappedIndex(index)),
+						pannelnode: self.pannels.item(index)
+					});
+
+					//延迟执行的脚本
+					var scriptsArea = self.pannels.item(index).all('.data-lazyload');
+					if(scriptsArea){
+						scriptsArea.each(function(node,i){
+							self.renderLazyData(node);
+						});
+					}
+				}
 			};
 
 			if(S.isNumber(tailSwitch)){
 				setTimeout(function(){
 					doSwitch();
+					//self.isTailSwitching = false;
 				},tailSwitch);
-			} else {
+			} else /*if(tailSwitch !== false)*/{
 				doSwitch();
+				//self.isTailSwitching = false;
 			}
 
 
@@ -1644,6 +1761,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 		"go":function(index,callback){
 			var self = this;
 
+			/*
             var goon = self.fire('beforeSwitch', {
 				index:index,
 				navnode:self.tabs.item(index),
@@ -1658,7 +1776,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					index = self.pannels.size() - self.colspan;
 				}
 				self.switch_to(index,callback);
-			}
+			}*/
+			self.switch_to(index,callback);
 
 			// TODO 讨论afterSwitch的发生时机
 			/*
