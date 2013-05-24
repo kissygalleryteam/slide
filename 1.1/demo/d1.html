@@ -48,6 +48,10 @@
 KISSY.use('gallery/slide/1.1/',function(S,Slide){
 	new Slide('Jtab',{
 		eventType:'mouseenter'
+	}).on('beforeSwitch',function(e){
+		S.log(e);	
+	}).on('afterSwitch',function(e){
+		console.info(e);	
 	});
 });</script>
 
