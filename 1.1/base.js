@@ -1217,11 +1217,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			});
 
 			self.on('beforeTailSwitch',function(o){
-				if(self.isTailSwitching === true) {
-					return false;
-				}
+				//if(self.isTailSwitching === true) {
+				//	return false;
+				//}
 
-				self.isTailSwitching = true;
+				//self.isTailSwitching = true;
 				self.subLayerRunout(o.index);	
 				// 同时，返回需要delay的最长时间
 				return self.getMaxAnimDelay(o.index);
@@ -1746,11 +1746,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			if(S.isNumber(tailSwitch)){
 				setTimeout(function(){
 					doSwitch();
-					self.isTailSwitching = false;
+					//self.isTailSwitching = false;
 				},tailSwitch);
-			} else if(tailSwitch !== false){
+			} else /*if(tailSwitch !== false)*/{
 				doSwitch();
-				self.isTailSwitching = false;
+				//self.isTailSwitching = false;
 			}
 
 
