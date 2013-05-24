@@ -242,6 +242,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 	// BSlide构造器
 	// TODO BSlide工厂
 	var BSlide = function(){
+
+		var abc= "";
 		
 		// TODO 如何传参?
 		if (!(this instanceof BSlide)) {
