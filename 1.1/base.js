@@ -20,8 +20,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 	// TODO BSlide工厂
 	var BSlide = function(){
 
-		var abc= "";
-		
 		// TODO 如何传参?
 		if (!(this instanceof BSlide)) {
 			throw new Error('please use "new Slide()"');
@@ -1433,7 +1431,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				}
 			}catch(e){}
 			var _index = self.currentTab+1;
-			console.log(self.pannels);
 			if(_index >= (self.length - self.colspan + 1)){
 				_index = _index % (self.length - self.colspan + 1);
 			}
@@ -1558,7 +1555,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				pannelnode: self.pannels.item(self.currentTab)
 			});
 
-			self.hightlightNav(self.getWrappedIndex(index));
 			self.fixSlideSize(index);
 			if(self.autoSlide){
 				self.stop().play();
@@ -1728,6 +1724,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					animFn[self.effect](index);
 
 					self.currentTab = index;
+					self.hightlightNav(self.getWrappedIndex(index));
 					// TODO，讨论switch的发生时机
 					self.fire('switch', {
 						index: index,
