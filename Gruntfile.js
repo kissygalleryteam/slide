@@ -70,5 +70,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-kmc');
 	grunt.loadNpmTasks('grunt-text-replace');
 
-    return grunt.registerTask('default', ['kmc','uglify']);
+    return grunt.registerTask('default', ['kmc','uglify'/*,'replace'*/]);
 };
