@@ -179,7 +179,7 @@ tab面板的className，默认为tab-pannel
 
 *id* (String)
 
-整个Tab组件所在的容器id，通常是通过Slide构造器的第一个参数指定，这里可不传，应当直接写id，比如"id"（正确），"#id" （不正确）
+整个Tab组件所在的容器id，通常是通过Slide构造器的第一个参数指定，这里可不传
 
 *carousel* (Boolean)
 
@@ -237,7 +237,7 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 *webkitOptimize* (Boolean)
 
-是否在webkit浏览器中开启硬件加速，默认为true，因为webkit在各平台中可能有bug，常需要临时性关闭移动设备中的硬件加速，则可以通过设置此属性为false来实现。
+是否在webkit浏览器中开启硬件加速，默认为true，因为webkit在各平台中可能有bug，常需要临时性关闭移动设备中的硬件加速。
 
 <hr class="smooth" />
 

@@ -72,10 +72,10 @@
   <ul class="tab-nav clearfix">
   </ul>
   <div class="tab-content">
-	<div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s1.jpg" /></p></div>
-    <div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s2.jpg" /></p></div>
-    <div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s3.jpg" /></p></div>
-	<div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s4.jpg" /></p></div>
+	<div class="tab-pannel"><p><img src="http://img03.taobaocdn.com/tps/i3/T1Fu9EXuljXXXG7QLy-500-375.jpg" /></p></div>
+    <div class="tab-pannel"><p><img src="http://img04.taobaocdn.com/tps/i4/T1E2iQXz4cXXXG7QLy-500-375.jpg" /></p></div>
+    <div class="tab-pannel"><p><img src="http://img01.taobaocdn.com/tps/i1/T1fMKDXrpiXXXG7QLy-500-375.jpg" /></p></div>
+	<div class="tab-pannel"><p><img src="http://img02.taobaocdn.com/tps/i2/T19jOPXx0fXXXG7QLy-500-375.jpg" /></p></div>
   </div>
 </div>
 
@@ -88,31 +88,46 @@
 	<li><a href="">4</a></li>
   </ul>
   <div class="tab-content">
-	<div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s1.jpg" /></p></div>
-    <div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s2.jpg" /></p></div>
-    <div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s3.jpg" /></p></div>
-	<div class="tab-pannel"><p><img src="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/s4.jpg" /></p></div>
+	<div class="tab-pannel"><p><img src="http://img03.taobaocdn.com/tps/i3/T1Fu9EXuljXXXG7QLy-500-375.jpg" /></p></div>
+    <div class="tab-pannel"><p><img src="http://img04.taobaocdn.com/tps/i4/T1E2iQXz4cXXXG7QLy-500-375.jpg" /></p></div>
+    <div class="tab-pannel"><p><img src="http://img01.taobaocdn.com/tps/i1/T1fMKDXrpiXXXG7QLy-500-375.jpg" /></p></div>
+	<div class="tab-pannel"><p><img src="http://img02.taobaocdn.com/tps/i2/T19jOPXx0fXXXG7QLy-500-375.jpg" /></p></div>
   </div>
 </div>
 
 
 </body>
 <script>
+    var S = KISSY;
+	var srcPath = "../../../";
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 
-		window.s = new Slide('J_tab_1',{
+		new Slide('J_tab_1',{
 			autoSlide:false,
 			eventype:'click'
 		});
 
-		window.s = new Slide('J_tab_2',{
+		new Slide('#J_tab_2',{
 			autoSlide:false,
 			eventype:'click',
 			effect:'vSlide',
 			autoSlide:true,
 			timeout:3000,
-			speed:0.5
+			speed:600
 		});
 
 		new Slide('J_tab_3',{
@@ -121,7 +136,7 @@
 			effect:'hSlide',
 			autoSlide:true,
 			timeout:3000,
-			speed:0.5,
+			speed:500,
 			hoverStop:true
 		});
 		
