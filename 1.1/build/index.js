@@ -991,13 +991,10 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						// 滑动距离超过一帧
 						if(swipeleft){//下一帧
 							if(span >= 1 && self.length >2){
-								// TODO 这里将solspan设为大于1的值时，有时候会意外复位，复现条件未知
-								/*
-								console.log('currentTab:'+self.currentTab+' span:'+span);
-								*/
-								self.currentTab += span;
-								if(self.currentTab >= self.length - 1){
-									self.currentTab = self.length - 2;
+								//  +1 是为了在向右滑动时，始终保持前进一档，不会出现后退一格
+								self.currentTab += span + 1;
+								if(self.currentTab >= (self.length - self.colspan)){
+									self.currentTab  = self.length - self.colspan - 1;
 								}
 							}
 							self.next();
@@ -1006,7 +1003,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 								if(self.currentTab - span <= 0){
 									self.currentTab = 1;
 								}else{
-									self.currentTab += -1 * span;
+									//  -1 是为了在向左滑动时，始终保持向左划，不会出现回弹
+									self.currentTab += -1 * span -1;
 								}
 							}
 							self.previous();
@@ -1981,32 +1979,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 		"go":function(index,callback){
 			var self = this;
 
-			/*
-            var goon = self.fire('beforeSwitch', {
-				index:index,
-				navnode:self.tabs.item(index),
-				pannelnode:self.pannels.item(index)
-            });
-
-			if(goon !== false){
-				//发生go的时候首先判断是否需要整理空间的长宽尺寸
-				//self.renderSize(index);
-
-				if(index + self.colspan > self.pannels.size()){
-					index = self.pannels.size() - self.colspan;
-				}
-				self.switch_to(index,callback);
-			}*/
 			self.switch_to(index,callback);
-
-			// TODO 讨论afterSwitch的发生时机
-			/*
-            self.fire('afterSwitch', {
-                index: index,
-                navnode: self.tabs.item(self.getWrappedIndex(index)),
-                pannelnode: self.pannels.item(index)
-            });
-			*/
 
 			return this;
 
