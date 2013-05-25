@@ -1,32 +1,41 @@
-<!doctype html>
-<html>
+<!DOCTYPE HTML>
+<!--[if lt IE 7]><html class="no-js ie ie6 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 7]><html class="no-js ie ie7 lte9 lte8 lte7"> <![endif]-->
+<!--[if IE 8]><html class="no-js ie ie8 lte9 lte8"> <![endif]-->
+<!--[if IE 9]><html class="no-js ie ie9 lte9"> <![endif]-->
+<!--[if gt IE 9]><html class="no-js"><![endif]-->
+<!--[if !IE]><!--><html><!--<![endif]-->
 <head>
-    <meta charset="utf-8"/>
-    <title>demo标题</title>
-    <script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy-min.js" charset="utf-8"></script>
+	<meta charset="UTF-8">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title></title>
 </head>
 <body>
-<h2>demo标题</h2>
+	<style>
+		ul.demo {
+			font-size:25px;
+		}
 
-<script>
-    var S = KISSY;
-    if (S.Config.debug) {
-        var srcPath = "../../../";
-        S.config({
-            packages:[
-                {
-                    name:"gallery",
-                    path:srcPath,
-                    charset:"utf-8",
-                    ignorePackageNameInUri:true
-                }
-            ]
-        });
-    }
+	</style>
 
-    S.use('gallery/slide/1.1/index', function (S, Slide) {
-         var slide = new Slide();
-    })
-</script>
+	<h2>demo</h2>
+
+	<ul class="demo">
+		<li><a href="d1.html?ks-debug">D1</a> 普通tab切换</li>
+		<li><a href="d2.html?ks-debug">D2</a> 渐变切换</li>
+		<li><a href="d3.html?ks-debug">D3</a> 焦点图，支持触屏</li>
+		<li><a href="d4.html?ks-debug">D4</a> Layerslide，触屏、ie6/7/8下关闭</li>
+		<li><a href="d5.html?ks-debug">D5</a> 小图滚动，支持触屏</li>
+		<li><a href="d6.html?ks-debug">D6</a> 水平滚动，触屏支持设为false</li>
+		<li><a href="d7.html?ks-debug">D7</a> 同上</li>
+		<li><a href="d8.html?ks-debug">杂项1</a> 杂项</li>
+		<li><a href="touch.html?ks-debug">杂项2</a> 触屏demo</li>
+	</ul>
+	</ul>
+
+
 </body>
 </html>
