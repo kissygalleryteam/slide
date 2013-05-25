@@ -7,7 +7,7 @@ gallery/slide/1.1/base
 gallery/slide/1.1/index
 
 */
-KISSY.add('mobile/slide/1.1/slide-util',function(S){
+KISSY.add('gallery/slide/1.1/slide-util',function(S){
 
 	"use strict";
 
@@ -125,7 +125,7 @@ KISSY.add('mobile/slide/1.1/slide-util',function(S){
 
 /*jshint browser:true,devel:true */
 
-KISSY.add('mobile/slide/1.1/kissy2yui',function(S){
+KISSY.add('gallery/slide/1.1/kissy2yui',function(S){
 
 	"use strict";
 
@@ -232,7 +232,7 @@ KISSY.add('mobile/slide/1.1/kissy2yui',function(S){
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add('mobile/slide/1.1/base',function(S){
+KISSY.add('gallery/slide/1.1/base',function(S){
 
 	"use strict";
 
@@ -2013,7 +2013,7 @@ KISSY.add('mobile/slide/1.1/base',function(S){
 
 
 
-KISSY.add('mobile/slide/1.1/index',function(S,BSlide){
+KISSY.add('gallery/slide/1.1/index',function(S,BSlide){
 
 	return BSlide;
 
