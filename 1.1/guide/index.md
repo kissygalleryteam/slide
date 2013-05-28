@@ -1,4 +1,7 @@
-Demo:<http://docs.kissyui.com/kissy-gallery/gallery/slide/1.0/index.html#api=useage.markdown.api>
+## Slide
+
+- by 拔赤
+- [Demo](http://mobile.kissyui.com/direct.php?type=demo&name=slide)
 
 > 这是一个选项卡切换控件，基于KISSY 1.3.0，并针对移动终端（ios/Android）有简单的性能优化，动画流畅，支持基础的触屏事件。
 
@@ -11,7 +14,7 @@ Demo:<http://docs.kissyui.com/kissy-gallery/gallery/slide/1.0/index.html#api=use
 
 	<script>
 		// 回调传入了S（KISSY对象）和Slide构造器
-		KISSY.use('gallery/slide/1.0/',function(S,Slide){
+		KISSY.use('gallery/slide/1.1/',function(S,Slide){
 			// 这里可以调用Slide
 		});
 	</script>
@@ -54,7 +57,7 @@ Slide依赖典型的HTML结构
 
 这样来调用：
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 		var s = new Slide('JSlide');
 	});
 
@@ -345,7 +348,7 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 		new Slide('Jtab',{
 			eventType:'mouseenter' // 鼠标触碰切换
 		});
@@ -364,7 +367,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 
 		var s = new Slide('JSlide',{
 			eventType:'click',//点击触碰点切换
@@ -394,7 +397,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 		var C = new Slide('slides',{
 			autoSlide:true,
 			effect:'vSlide', //垂直切换
@@ -410,7 +413,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 		new Slide('JSlide',{
 			effect:'hSlide', //水平切换
 			carousel:true, //可以配置为跑马灯,也可以为false
@@ -469,7 +472,7 @@ HTML代码：
 JS 代码：
 
 	<script>
-	KISSY.use('gallery/slide/1.0/',function(S,Slide){
+	KISSY.use('gallery/slide/1.1/',function(S,Slide){
 		new Slide('slides',{
 			autoSlide:false,
 			effect:'hSlide',
@@ -507,3 +510,5 @@ JS 代码：
 - <a href="d7.html">Demo7</a>
 - <a href="d8.html">Demo8</a>
 - <a href="touch.html">Touch</a>
+
+1.0版Demo:<http://docs.kissyui.com/kissy-gallery/gallery/slide/1.0/index.html#api=useage.markdown.api>

@@ -44,11 +44,31 @@ module.exports = function(grunt) {
                     '<%= pkg.version %>/build/index-min.js': ['<%= pkg.version %>/build/index.js']
                 }
             }
-        }
+        },
+		// added by jayli
+		// 替换gallery 为mobile
+		'replace': {
+			example:{
+				src:[
+                    '<%= pkg.version %>/build/index.js',
+                    '<%= pkg.version %>/build/index-min.js'
+				],
+				overwrite:true,
+				replacements:[
+					{
+						from:/KISSY.add\((.)gallery\//g,
+						to:'KISSY.add($1mobile/'
+					}
+				]
+
+			}
+		}
     });
 
     // 使用到的任务，可以增加其他任务
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-kmc');
-    return grunt.registerTask('default', ['kmc', 'uglify']);
+	grunt.loadNpmTasks('grunt-text-replace');
+
+    return grunt.registerTask('default', ['kmc','uglify'/*,'replace'*/]);
 };
