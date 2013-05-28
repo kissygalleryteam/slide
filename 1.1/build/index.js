@@ -1000,11 +1000,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							self.next();
 						}else{//上一帧
 							if(span >= 1 && self.length > 2){
-								if(self.currentTab - span <= 0){
+								//  -1 是为了在向左滑动时，始终保持向左划，不会出现回弹
+								self.currentTab += -1 * span -1;
+								// 如果滑动到起始位置，就不需要再减一了
+								if(self.currentTab <= 0){
 									self.currentTab = 1;
-								}else{
-									//  -1 是为了在向左滑动时，始终保持向左划，不会出现回弹
-									self.currentTab += -1 * span -1;
 								}
 							}
 							self.previous();
