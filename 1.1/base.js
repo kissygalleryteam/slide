@@ -1597,12 +1597,16 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
-						self.anim = S.Anim(self.animwrap,{
-							opacity:1
-						},doeffect ? self.speed : 0.01,self.easing,function(){
+						if(doeffect){
+							self.anim = S.Anim(self.animwrap,{
+								opacity:1
+							},self.speed ,self.easing,function(){
+								afterSwitch();
+							});
+							self.anim.run();
+						} else {
 							afterSwitch();
-						});
-						self.anim.run();
+						}
 					} else {
 						/*
 						self.anim = new S.Anim({
@@ -1640,12 +1644,16 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 							'-webkit-backface-visibility':'hidden'
 						});
-						self.anim = S.Anim(self.animwrap,{
-							opacity:1
-						},doeffect ? self.speed : 0.01,self.easing,function(){
+						if(doeffect){
+							self.anim = S.Anim(self.animwrap,{
+								opacity:1
+							},self.speed ,self.easing,function(){
+								afterSwitch();
+							});
+							self.anim.run();
+						} else {
 							afterSwitch();
-						});
-						self.anim.run();
+						}
 					}else{
 
 						if(doeffect){
