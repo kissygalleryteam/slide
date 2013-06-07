@@ -1,10 +1,10 @@
 {
     "name": "slide",
     "version": "1.1",
-    "desc": "Slide组件",
+    "desc": "淘宝标准Slide组件",
     "cover": "",
     "author": {
-        "name": "bachi",
+        "name": " 拔赤",
         "email": "bachi@taobao.com",
         "page": "请修改作者个人首页"
     },

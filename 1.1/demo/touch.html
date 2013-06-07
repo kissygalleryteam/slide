@@ -195,9 +195,15 @@ KISSY.use('gallery/slide/1.1/',function(S,Slide){
 				</div>
 			</div>
 		</div>
+		<p class="controls">
+			<button class="mul-add">add</button>
+			<button class="mul-remove">remove</button>
+			<button class="mul-prev">prev</button>
+			<button class="mul-next">next</button>
+		</p>
 		<script>
 		KISSY.use('gallery/slide/1.1/',function(S,Slide){
-			window.s = new Slide('#demo3',{
+			var s = new Slide('#demo3',{
 				contentClass:'flipsnap',
 				pannelClass:'item',
 				speed:340,// 速度可以调整，单位ms
@@ -205,6 +211,22 @@ KISSY.use('gallery/slide/1.1/',function(S,Slide){
 				//autoSlide:true,
 				touchmove:true,
 				colspan:3
+			});
+			S.one('.controls .mul-add').on('click',function(e){
+				s.add(S.Node('<div class="item"><div class="jay">'+(s.length + 1)+'</div></div>'));
+			});
+			S.one('.controls .mul-remove').on('click',function(e){
+				s.remove(s.length - 1);
+			});
+			S.one('.controls .mul-next').on('click',function(e){
+				if(!s.is_last()){
+					s.next();
+				}
+			});
+			S.one('.controls .mul-prev').on('click',function(e){
+				if(!s.is_first()){
+					s.previous();
+				}
 			});
 		});
 
