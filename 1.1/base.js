@@ -446,12 +446,12 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			if(self.transitions){
 				self.animwrap.setStyles({
 					'-webkit-transition-duration': '0s',
-					'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width)+'px,0,0)',
+					'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 					'-webkit-backface-visibility':'hidden'
 				});
 			}else{
 				self.animwrap.setStyles({
-					left: -1 * index * self.animcon.get('region').width
+					left: -1 * index * self.animcon.get('region').width / self.colspan
 					
 				});
 			}
