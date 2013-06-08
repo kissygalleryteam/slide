@@ -54,8 +54,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			}
 			//接受参数
 			self.buildParam(config);
-			//构建事件中心,YUI3需要另外创建事件中心
-			// self.buildEventCenter();
 			//构造函数
 			self.buildHTML();
 			//绑定事件
@@ -89,13 +87,15 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				self.initLayer();
 			}
 
+			// 渲染当前帧的lazyload的内容
+			self.renderPannelTextarea(self.currentTab);
+
 			return this;
 		},
 
 		// offset 1,-1
 		setWrapperSize:function(offset){
 			var self = this;
-
 
 			if(S.isUndefined(offset)){
 				offset = 0;
@@ -233,6 +233,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			// TODO 删除面板的时候，没有删除导航
 			return this;
 		},
+		// 删除最后一帧
 		removeLast:function(){
 			var self = this;
 			self.remove(self.length - 1);
@@ -251,17 +252,31 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				html = textarea.get('innerHTML').replace(/&lt;/ig,'<').replace(/&gt;/ig,'>'),
 				div = S.Node.create('<div>'+html+'</div>');
 			S.DOM.insertBefore(div,textarea);
-			//textarea.insertBefore(div);
 			S.execScript(html);
 		},
-		// 绑定函数 ,YUI3需要重新定义这个绑定函数,KISSY不需要
-		/*
-		on:function(type,foo){
+		// 渲染第index个pannel的延迟渲染的textarea
+		renderPannelTextarea:function(index){
 			var self = this;
-			self.EventCenter.subscribe(type,foo);
-			return this;
+			if(!self.pannels.item(index)){
+				return;
+			}
+
+			var renderOnePannelT = function(index){
+				var con = S.one(self.pannels.item(index));
+
+				var scriptsArea = self.pannels.item(index).all('.data-lazyload');
+				if(scriptsArea){
+					scriptsArea.each(function(node,i){
+						self.renderLazyData(node);
+					});
+				}
+			};
+
+			for(var i = 0;i<self.colspan;i++){
+				renderOnePannelT(index+i);
+			}
+
 		},
-		*/
 
 		// 如果是动画效果，则构建Wrap
 		buildWrap: function(){
@@ -1739,12 +1754,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					});
 
 					//延迟执行的脚本
-					var scriptsArea = self.pannels.item(index).all('.data-lazyload');
-					if(scriptsArea){
-						scriptsArea.each(function(node,i){
-							self.renderLazyData(node);
-						});
-					}
+					self.renderPannelTextarea(index);
 				}
 			};
 
