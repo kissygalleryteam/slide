@@ -1,4 +1,3 @@
-
 /**
  * @file base.js
  * @brief Slide
@@ -1739,7 +1738,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 					});
 
 					//延迟执行的脚本
-					var scriptsArea = self.pannels.item(index).all('.data-lazyload');
+					var scriptsArea = self.pannels.slice(index,index+self.colspan).all('.data-lazyload');
 					if(scriptsArea){
 						scriptsArea.each(function(node,i){
 							self.renderLazyData(node);
