@@ -404,8 +404,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 			self.fixSlideSize(self.currentTab);
 
-			// S.log(node.offset().top);
-
 			// bugfix pad/phone中避免闪屏
 			if(self.transitions){
 				node.css({
@@ -498,7 +496,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			for(var i = 0;i<self.colspan;i++){
 				renderOnePannelT(index+i);
 			}
-
 		},
 
 		// 如果是动画效果，则构建Wrap
@@ -547,7 +544,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						'overflow': 'hidden',
 						'top': -1 * self.defaultTab * animconRegion.height + 'px'
 					});
-
 				},
 
 				'hSlide':function(){
@@ -586,15 +582,12 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							});
 						}
 					});
-
 				}
-
 			};
 
 			effectInitFn[self.effect]();
 
 			return this;
-
 		},
 		//构建html结构的全局函数
 		buildHTML: function() {
@@ -943,10 +936,12 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			}
 
 			// 绑定窗口resize事件 
-			S.Event.on('resize',function(e){
-				self.fixSlideSize(self.currentTab);
-				self.relocateCurrentTab();
-			},window);
+			try {
+				S.Event.on('resize',function(e){
+					self.fixSlideSize(self.currentTab);
+					self.relocateCurrentTab();
+				},window);
+			} catch(e){}
 
 			// 绑定判断switch发生的时机
 			self.on('beforeSwitch',function(o){
@@ -1222,12 +1217,6 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				var that = this;
 				var _sublayer_keys = [];
 				
-				/*
-				S.each(SubLayerConfig,function(k,v){
-					_sublayer_keys.push(k);
-				});
-				*/
-
 				// 如果sublayer配置的书写格式不标准，则这里会报错
 				// TODO 错误捕捉处理
 				var json = el.attr('rel').replace(/"'/ig,'').replace(new RegExp('('+SubLayerString.join('|')+')',"ig"),'"$1"');
