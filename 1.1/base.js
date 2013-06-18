@@ -1540,7 +1540,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 
 			var afterSwitch = function(){
 				if(S.isFunction(callback)){
-					callback.apply(self,self);
+					callback.call(self,self);
 				}
 				self.fire('afterSwitch',{
 					index: self.currentTab,
