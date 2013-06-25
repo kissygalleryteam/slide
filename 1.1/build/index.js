@@ -909,7 +909,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			var self = this;
 			if(	S.inArray(self.eventType,['click','mouseover','mouseenter'] )) {
 				self.con._delegate(self.eventType,function(e){
-					e.halt();
+					//e.halt();
+					e.preventDefault();
 					self.massTrigger(function(){
 						var ti = Number(self.tabs.indexOf(e.currentTarget));
 						if(self.carousel){
@@ -1095,7 +1096,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 						if(!self.isScrolling){
 
 							// 阻止默认上下滑动事件
-							e.halt();
+							//e.halt();
+							e.preventDefault();
 
 							self.stop();
 							var width = Number(self.animcon.get('region').width / self.colspan);
