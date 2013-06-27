@@ -101,7 +101,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				offset = 0;
 			}
 
-			self.pannels = self.con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+			self.pannels = self.con.all('.' + self.contentClass + ' .' + self.pannelClass);
 			self.length = self.pannels.length;
 
 			var reHandleSize = {
@@ -283,7 +283,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			self.animwrap.set('innerHTML', self.animcon.get('innerHTML'));
 			self.animcon.set('innerHTML', '');
 			self.animcon.appendChild(self.animwrap);
-			self.pannels = self.con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+			self.pannels = self.con.all('.' + self.contentClass + ' .' + self.pannelClass);
 
 			return self;
 
@@ -298,7 +298,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			var effectInitFn = {
 				'none':function(){
 
-					self.pannels = self.con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+					self.pannels = self.con.all('.' + self.contentClass + ' .' + self.pannelClass);
 					self.pannels.setStyles({
 						display:'none'	
 					});
@@ -339,7 +339,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				},
 				'fade':function(){
 
-					self.pannels = self.con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+					self.pannels = self.con.all('.' + self.contentClass + ' .' + self.pannelClass);
 					self.pannels.setStyles({
 						'position': 'absolute',
 						'zIndex': 0
@@ -706,11 +706,11 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				self.con._delegate('mouseover',function(e){
 					//e.halt();
 					if(self.autoSlide)self.stop();
-				},'.'+self.contentClass+' div.'+self.pannelClass);
+				},'.'+self.contentClass+' .'+self.pannelClass);
 				self.con._delegate('mouseout',function(e){
 					//e.halt();
 					if(self.autoSlide)self.play();
-				},'.'+self.contentClass+' div.'+self.pannelClass);
+				},'.'+self.contentClass+' .'+self.pannelClass);
 			}
 
 			// 绑定窗口resize事件 
@@ -1342,7 +1342,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			var con = self.con;
             self.animcon = self.con.one('.' + self.contentClass);
 			self.animwrap = self.animcon.one('div');
-			self.pannels = con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+			self.pannels = con.all('.' + self.contentClass + ' .' + self.pannelClass);
 			if(self.effect == 'hSlide'){
 				var width = Number(self.animcon.get('region').width / self.colspan);
 				var height = Number(self.animcon.get('region').height);
@@ -1364,7 +1364,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				}
 			}
 			//重新获取重组之后的tabs
-			self.pannels = con.all('.' + self.contentClass + ' div.' + self.pannelClass);
+			self.pannels = con.all('.' + self.contentClass + ' .' + self.pannelClass);
 			self.length = self.pannels.size();
 
 			return this;
@@ -1459,7 +1459,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			self.currentTab = self.colspan;
 			var con = self.con;
 			if(self.effect != 'none'){
-				self.pannels = con.all('.'+self.contentClass+' div.'+self.pannelClass);
+				self.pannels = con.all('.'+self.contentClass+' .'+self.pannelClass);
 			}
 
 			//目标offset，'-234px'
@@ -1493,7 +1493,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			self.currentTab = self.length - 1 - self.colspan * 2 + 1;
 			var con = self.con;
 			if(self.effect != 'none'){
-				self.pannels = con.all('.'+self.contentClass+' div.'+self.pannelClass);
+				self.pannels = con.all('.'+self.contentClass+' .'+self.pannelClass);
 			}
 			// 目标offset,是一个字符串 '-23px'
 			var dic = '-' + (Number(self.animcon.get('region').width / self.colspan) * (self.currentTab)).toString() + 'px';
