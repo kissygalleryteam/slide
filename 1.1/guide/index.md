@@ -377,7 +377,7 @@ JS代码：
 			selectedClass:'current',//触碰点选中时的ClassName
 			triggerSelector:'a',//触碰节点为a
 			effect:'fade',//渐变切换
-			autoPlay:true //开启自动播放
+			autoSlide:true //开启自动播放
 		});
 
 		// 跳到下一帧
