@@ -848,14 +848,14 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 		massTrigger:function(cb,el){
 			var self = this;
 			if(!S.inArray(self.eventType,['mouseover','mouseenter'])){
-				cb();
+				cb(S.one(el));
 				return;
 			}
 			self.getMousePosition();
 			if(S.isUndefined(self._fired) || S.isNull(self._fired)){
 				self._fired = setTimeout(function(){
 					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
-						cb();	
+						cb(S.one(el));	
 					}
 					self._fired = null;
 				},self.triggerDelay);
@@ -863,7 +863,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				clearTimeout(self._fired);
 				self._fired = setTimeout(function(){
 					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
-						cb();	
+						cb(S.one(el));	
 					}
 					self._fired = null;
 				},self.triggerDelay);
@@ -911,8 +911,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				self.con._delegate(self.eventType,function(e){
 					//e.halt();
 					e.preventDefault();
-					self.massTrigger(function(){
-						var ti = Number(self.tabs.indexOf(e.currentTarget));
+					self.massTrigger(function(el){
+						var ti = Number(self.tabs.indexOf(el));
 						if(self.carousel){
 							ti = (ti + 1) % self.length;
 						}
