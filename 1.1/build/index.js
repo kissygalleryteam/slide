@@ -839,7 +839,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				self._t_mouseX = e.clientX;
 				self._t_mouseY = e.clientY;
 			};
-			S.Event.on(window,'mousemove',domousemove);
+			S.Event.on(document,'mousemove',domousemove);
 			setTimeout(function(){
 				S.Event.detach(window,'mouseover',domousemove);
 			},self.triggerDelay);

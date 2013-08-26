@@ -8,6 +8,19 @@
 <link rel="stylesheet" href="http://a.tbcdn.cn/apps/ks/zoo/slide/demo/img/d1.css" />
 </head>
 <body>
+	<style>
+		#log {
+			position:fixed;
+			height:400px;
+			width:300px;
+			right:0px;
+			top:0px;
+			overflow:scroll;
+		}
+
+	</style>
+	<div id="log">
+	</div>
 <div id="Jtab">
 	  <ul class="tab-nav">
 		<li class="tab1"><a href="#">Tab One</a></li>
@@ -46,6 +59,10 @@
 	});
 	
 KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	console.log('sdf');
+	S.Event.on(window,'mousemove',function(){
+		console.log(new Date().getTime());	
+	});
 	new Slide('Jtab',{
 		eventType:'mouseenter'
 	}).on('beforeSwitch',function(e){
@@ -53,7 +70,15 @@ KISSY.use('gallery/slide/1.1/',function(S,Slide){
 	}).on('afterSwitch',function(e){
 		console.info(e);	
 	});
-});</script>
+});
+function log(msg){
+	document.getElementById('log').innerHTML += '<p>' + msg + '</p>';
+}
+
+log('aasdfaf');
+
+</script>
+
 
 </body>
 </html>
