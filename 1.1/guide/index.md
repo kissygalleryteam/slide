@@ -246,6 +246,8 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 ### 事件
 
+通过给实例绑定
+
 *ready*
 
 初始化完成后的事件回调，带入上下文this，带入参数为
@@ -498,17 +500,5 @@ JS 代码：
 - alpha			是否带有透明度变幻，默认为true
 - offsetin		进入动画的相对距离，默认为50
 - offsetout		移出动画的相对距离，默认为50
-
-### Demos
-
-- <a href="d1.html">Demo1</a>
-- <a href="d2.html">Demo2</a>
-- <a href="d3.html">Demo3</a>
-- <a href="d4.html">Demo4</a>
-- <a href="d5.html">Demo5</a>
-- <a href="d6.html">Demo6</a>
-- <a href="d7.html">Demo7</a>
-- <a href="d8.html">Demo8</a>
-- <a href="touch.html">Touch</a>
 
 1.0版Demo:<http://docs.kissyui.com/kissy-gallery/gallery/slide/1.0/index.html#api=useage.markdown.api>
