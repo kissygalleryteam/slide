@@ -854,7 +854,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			self.getMousePosition();
 			if(S.isUndefined(self._fired) || S.isNull(self._fired)){
 				self._fired = setTimeout(function(){
-					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
+					if(self.inRegion([self._t_mouseX + S.DOM.scrollLeft(),self._t_mouseY + S.DOM.scrollTop()],S.one(el))){
 						cb(S.one(el));	
 					}
 					self._fired = null;
@@ -862,7 +862,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 			} else {
 				clearTimeout(self._fired);
 				self._fired = setTimeout(function(){
-					if(self.inRegion([self._t_mouseX,self._t_mouseY],S.one(el))){
+					if(self.inRegion([self._t_mouseX + S.DOM.scrollLeft(),self._t_mouseY + S.DOM.scrollTop()],S.one(el))){
 						cb(S.one(el));	
 					}
 					self._fired = null;
