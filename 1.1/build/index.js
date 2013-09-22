@@ -2016,7 +2016,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 	return BSlide;
 
 },{
-	requires:['node','event','json','./slide-util','./kissy2yui']	
+	requires:['node','json','event','./slide-util','./kissy2yui']	
 });
 
 

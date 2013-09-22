@@ -58,6 +58,7 @@ Slide依赖典型的HTML结构
 这样来调用：
 
 	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+		// 直接指定id，也可以指定选择器，比如："#id .className"
 		var s = new Slide('JSlide');
 	});
 
@@ -81,7 +82,7 @@ Slide依赖典型的HTML结构
 
 通过配置参数来定制渲染的示例代码：
 
-	new Slide('J_tab',{
+	new Slide('#J_tab',{
 		eventype:'click',//tab上的触发事件
 		effect:'vSlide',//切换效果为纵向滚动
 		autoSlide:true,//自动播放
@@ -336,7 +337,13 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 *relocateCurrentTab*
 
-无参数，重新修正当前帧的位置，内部方法
+无参数，重新修正当前帧的位置，当Slide尺寸变化时需要重新渲染，可调用此方法，比如
+
+	//当浏览器尺寸变化时，更新当前Tab的尺寸和相对位置
+	S.Event.on('resize',function(e){
+		self.fixSlideSize(self.currentTab);//更新尺寸
+		self.relocateCurrentTab();// 更新位置
+	},window);
 
 *initLayer*
 
