@@ -60,9 +60,6 @@
 	
 KISSY.use('gallery/slide/1.1/',function(S,Slide){
 	console.log('sdf');
-	S.Event.on(window,'mousemove',function(){
-		console.log(new Date().getTime());	
-	});
 	new Slide('Jtab',{
 		eventType:'mouseenter'
 	}).on('beforeSwitch',function(e){
