@@ -341,8 +341,8 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 	//当浏览器尺寸变化时，更新当前Tab的尺寸和相对位置
 	S.Event.on('resize',function(e){
-		self.fixSlideSize(self.currentTab);//更新尺寸
-		self.relocateCurrentTab();// 更新位置
+		slide.fixSlideSize(slide.currentTab);//更新尺寸
+		slide.relocateCurrentTab();// 更新位置
 	},window);
 
 *initLayer*
