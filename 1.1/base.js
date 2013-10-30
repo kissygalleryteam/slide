@@ -1,4 +1,3 @@
-
 /**
  * @file base.js
  * @brief Slide
@@ -355,7 +354,7 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 							//node.addClass('hidden');
 							node.setStyles({
 								'opacity':0,
-								'diaplay':'none'	
+								'display':'none'	
 							});
 						}
 					});
