@@ -1,6 +1,6 @@
 {
     "name": "slide",
-    "version": "1.1",
+    "version": "1.2",
     "desc": "兼容多种端的Slide组件，实现幻灯、Tab、跑马灯等效果",
     "cover": "",
 	"tag":"mobile",

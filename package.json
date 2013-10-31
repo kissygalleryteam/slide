@@ -6,6 +6,7 @@
     "grunt": "~0.4.1",
     "grunt-kmc": "~0.1.1",
     "grunt-mocha": "~0.3.0",
+	"grunt-flexcombo":"",
     "grunt-contrib-cssmin": "~0.6.0"
 }
 }
