@@ -1418,7 +1418,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 			// 如果是跑马灯，则不考虑默认选中的功能，一律定位在第一页,且只能是左右切换的不支持上下切换
 			if(self.carousel){
-				self.defaultTab = self.colspan; //跑马灯显示的是真实的第二项
+				self.defaultTab = self.colspan + self.defaultTab; //跑马灯显示的是真实的第二项
 				self.effect = 'hSlide';// TODO 目前跑马灯只支持横向滚动
 			}
 
@@ -1448,16 +1448,21 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 				var last = self.pannels.item(self.pannels.size()- 1 - index).cloneNode(true);
 				self.animwrap.append(first);
 				self.animwrap.prepend(last);
+				if(self.defaultTab !== 0){
+					var offset_width = -1 * width * (index/2 + 1 + self.defaultTab -1);
+				} else {
+					var offset_width = -1 * width * (index/2 + 1);
+				}
 				if(self.transitions){
 					//这步操作会手持终端中造成一次闪烁,待解决
 					self.animwrap.setStyles({
 						'-webkit-transition-duration': '0s',
-						'-webkit-transform':'translate3d('+(-1 * width * (index/2 + 1))+'px,0,0)',
+						'-webkit-transform':'translate3d('+offset_width+'px,0,0)',
 						'-webkit-backface-visibility':'hidden',
 						'left':'0'
 					});
 				}else {
-					self.animwrap.setStyle('left',-1 * width * (index/2 + 1));
+					self.animwrap.setStyle('left',offset_width);
 				}
 			}
 			//重新获取重组之后的tabs

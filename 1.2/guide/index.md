@@ -211,7 +211,7 @@ tab面板的className，默认为tab-pannel
 
 *defaultTab* (Number)	
 
-默认定位在某个帧，默认为0，即第一帧
+默认定位在某个帧，默认为0，即第一帧，取值为自然数，1：定位在第一帧，2：定位在第二帧
 
 *layerSlide* (Boolean)	
 
