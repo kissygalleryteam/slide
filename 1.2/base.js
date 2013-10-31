@@ -413,9 +413,14 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 			self.doEffectInit();
 
-			self.fixSlideSize(self.currentTab);
+			if(self.carousel){
+				self.fixSlideSize(self.currentTab - self.colspan);
+				self.hightlightNav(self.currentTab - self.colspan);
+			} else {
+				self.fixSlideSize(self.currentTab);
+				self.hightlightNav(self.getWrappedIndex(self.currentTab));
+			}
             //添加选中的class
-			self.hightlightNav(self.getWrappedIndex(self.currentTab));
             //是否自动播放
             if (self.autoSlide === true) {
 				// 如果设置了invisibleStop为true，还要多判断一下slide是否在可视区
@@ -1418,7 +1423,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 			// 如果是跑马灯，则不考虑默认选中的功能，一律定位在第一页,且只能是左右切换的不支持上下切换
 			if(self.carousel){
-				self.defaultTab = self.colspan + self.defaultTab; //跑马灯显示的是真实的第二项
+				self.defaultTab = self.colspan + (self.defaultTab); //跑马灯显示的是真实的第二项
 				self.effect = 'hSlide';// TODO 目前跑马灯只支持横向滚动
 			}
 
