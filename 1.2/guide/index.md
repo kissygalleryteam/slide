@@ -323,9 +323,17 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 停止自动播放
 
-*hightlightNav*
+*highlightNav*
 
 高亮某个特定的导航项，参数为索引值index:0,1,2,3...
+
+*unhighlightNav*
+
+取消某个特定导航项的高亮，参数为索引值index:0,1,2,3...
+
+*unhighlightNavAll*
+
+取消所有导航项的高亮，无参数 
 
 *is`_`first*
 
