@@ -284,9 +284,8 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 			var self = this;
 
 			self.animwrap = S.Node.create('<div style="position:absolute;"></div>');
-			self.animwrap.set('innerHTML', self.animcon.get('innerHTML'));
-			self.animcon.set('innerHTML', '');
-			self.animcon.appendChild(self.animwrap);
+			self.animcon.children().appendTo(self.animwrap);
+			self.animcon.empty().appendChild(self.animwrap);
 			self.pannels = self.con.all('.' + self.contentClass + ' .' + self.pannelClass);
 
 			return self;
