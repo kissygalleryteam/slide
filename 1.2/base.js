@@ -415,10 +415,10 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 			if(self.carousel){
 				self.fixSlideSize(self.currentTab - self.colspan);
-				self.hightlightNav(self.currentTab - self.colspan);
+				self.highlightNav(self.currentTab - self.colspan);
 			} else {
 				self.fixSlideSize(self.currentTab);
-				self.hightlightNav(self.getWrappedIndex(self.currentTab));
+				self.highlightNav(self.getWrappedIndex(self.currentTab));
 			}
             //添加选中的class
             //是否自动播放
@@ -1403,7 +1403,8 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 				colspan:		1,
 				animWrapperAutoHeightSetting:true,// beforeSwitch不修改wrappercon 宽高
 				webkitOptimize	:true,
-				triggerDelay:	300 	// added by jayli 2013-05-21，触碰延时
+				triggerDelay:	300, 	// added by jayli 2013-05-21，触碰延时
+				autoActived:	true
 				
 			},setParam);
 
@@ -1624,7 +1625,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 		},
 		//高亮显示第index(0,1,2,3...)个nav
-		hightlightNav:function(index){
+		highlightNav:function(index){
 			var self = this;
 			// 同时是跑马灯，且一帧多元素，则不允许存在Nav
 			if(self.carousel && self.colspan > 1){
@@ -1634,6 +1635,30 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 				self.tabs.removeClass(self.selectedClass);
 				self.tabs.item(index).addClass(self.selectedClass);
 			}
+			return this;
+		},
+		hightlightNav:function(){
+			var self = this;
+			self.highlightNav.apply(self,arguments);
+			return this;
+		},
+		// 非高亮显示 index(0,1,2,3...)个nav
+		unhighlightNav:function(index){
+			var self  = this;
+			// 同时是跑马灯，且一帧多元素，则不允许存在Nav
+			if(self.carousel && self.colspan > 1){
+				return this;
+			}
+			if(self.tabs.item(index)){
+				self.tabs.removeClass(self.selectedClass);
+				// self.tabs.item(index).addClass(self.selectedClass);
+			}
+			return this;
+		},
+		// 非高亮显示全部
+		unhighlightNavAll: function(){
+			var self = this;
+			self.tabs.removeClass(self.selectedClass);
 			return this;
 		},
 		//切换至index,这里的index为真实的索引
@@ -1657,7 +1682,6 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 					pannelnode: self.pannels.item(self.currentTab)
 				});
 			};
-			
 
 			// tailSwitch 是秒数
 			var tailSwitch = self.fire('beforeTailSwitch',{
@@ -1843,7 +1867,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 					animFn[self.effect](index);
 
 					self.currentTab = index;
-					self.hightlightNav(self.getWrappedIndex(index));
+					self.highlightNav(self.getWrappedIndex(index));
 					// TODO，讨论switch的发生时机
 					self.fire('switch', {
 						index: index,
