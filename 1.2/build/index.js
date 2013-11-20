@@ -610,7 +610,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 							//node.addClass('hidden');
 							node.setStyles({
 								'opacity':0,
-								'diaplay':'none'	
+								'display':'none'	
 							});
 						}
 					});

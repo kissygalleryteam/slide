@@ -46,9 +46,10 @@ module.exports = function(grunt) {
 		// https://npmjs.org/package/grunt-flexcombo
 		flexcombo:{
 			// 无线H5项目调试，可打开host配置，用法参照
-			// https://speakerdeck.com/lijing00333/h5-xiang-mu-kai-fa-huan-jing-pei-zhi
+			// https://speakerdeck.com/lijing00333/grunt-flexcombo
 			debug:{
 				options:{
+					proxyport:8080,
 					target:'<%= pkg.version %>/build/',
 					urls:'/s/kissy/gallery/<%= pkg.name %>/<%= pkg.version %>',
 					port:'80',
