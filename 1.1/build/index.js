@@ -268,6 +268,8 @@ KISSY.add('gallery/slide/1.1/base',function(S){
 				self.con = selector;
 			}else if(/^#/i.test(selector)){
 				self.con = S.one(selector);
+			}else if(/^\./i.test(selector)){
+				self.con = S.one(selector);
 			}else if(S.one("#"+selector)){
 				self.con = S.one("#"+selector);
 			}else if(S.one(selector)){
