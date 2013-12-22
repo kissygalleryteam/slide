@@ -1,13 +1,13 @@
 /*
 combined files : 
 
-gallery/slide/1.2/slide-util
-gallery/slide/1.2/kissy2yui
-gallery/slide/1.2/base
-gallery/slide/1.2/index
+gallery/slide/1.3/slide-util
+gallery/slide/1.3/kissy2yui
+gallery/slide/1.3/base
+gallery/slide/1.3/index
 
 */
-KISSY.add('gallery/slide/1.2/slide-util',function(S){
+KISSY.add('gallery/slide/1.3/slide-util',function(S){
 
 	"use strict";
 
@@ -143,7 +143,7 @@ KISSY.add('gallery/slide/1.2/slide-util',function(S){
 
 /*jshint browser:true,devel:true */
 
-KISSY.add('gallery/slide/1.2/kissy2yui',function(S){
+KISSY.add('gallery/slide/1.3/kissy2yui',function(S){
 
 	"use strict";
 
@@ -250,7 +250,7 @@ KISSY.add('gallery/slide/1.2/kissy2yui',function(S){
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add('gallery/slide/1.2/base',function(S){
+KISSY.add('gallery/slide/1.3/base',function(S){
 
 	"use strict";
 
@@ -2170,7 +2170,7 @@ KISSY.add('gallery/slide/1.2/base',function(S){
 
 
 
-KISSY.add('gallery/slide/1.2/index',function(S,BSlide){
+KISSY.add('gallery/slide/1.3/index',function(S,BSlide){
 
 	return BSlide;
 
