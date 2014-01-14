@@ -1,0 +1,375 @@
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Demo</title>
+<link rel="stylesheet" href="http://pxgrid.github.com/js-flipsnap/css/style.css">
+<script src="http://g.tbcdn.cn/kissy/k/1.4.0/seed.js" type="text/javascript"></script>
+<link rel="stylesheet" href="http://a.tbcdn.cn/s/kissy/1.3.0/css/dpl/base.css" />
+<script>
+    var S = KISSY;
+	var srcPath = "../../../";
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
+
+function log(str){
+	S.one('#log').prepend('<p>'+str+'</p>');
+}
+</script>
+<style>
+#log{
+	position:fixed;
+	top:0;left:0;
+	width:500px;
+}
+
+</style>
+</head>
+<body>
+<div id="log">
+</div>
+<div class="all">
+
+<header class="mod-header">
+触屏测试
+</header>
+
+<div class="main">
+
+<section>
+	<h2>用法</h2>
+	<p>
+<pre>
+KISSY.use('gallery/slide/1.2/',function(S,Slide){
+	new Slide('#demo1',{
+		effect:'hSlide'
+	});
+});
+</pre>
+</p>
+	<h2>Doc</h2>
+	<section class="demo">
+		<p><a href="http://gallery.kissyui.com/slide/1.2/guide/index.html">Api文档</a></p>
+	</section>
+	<h2>Demo</h2>
+	<h3>简单demo</h3>
+	<section class="demo" id="demo-simple">
+	<style>
+	#demo1 .item {
+		float:left;
+		width:310px !important;
+	}
+	#demo1 .flipsnap {
+		overflow:hidden;
+		width:320px !important;
+		position:relative;
+		height:186px !important;
+	}
+
+	</style>
+		<div id="demo1" class="viewport">
+			<div class="flipsnap">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+			</div>
+		</div>
+		<script>
+		KISSY.use('gallery/slide/1.2/',function(S,Slide){
+			window.s = new Slide('#demo1',{
+				contentClass:'flipsnap',
+				pannelClass:'item',
+				speed:240,
+				defaultTab:2,
+				effect:'hSlide',
+				touchmove:true
+			});
+		});
+
+		</script>
+	</section>
+
+	<section class="demo" id="demo-img">
+		<h3>图片demo</h3>
+		<style>
+		#demo2 .item {
+			float:left;
+		}
+		#demo2 .flipsnap {
+			overflow:hidden;
+			width:320px !important;
+			position:relative;
+			height:186px !important;
+		}
+
+		</style>
+		打开后就滑动到下一帧	
+		<div id="demo2" class="viewport">
+			<div class="flipsnap">
+				<div class="item"><img src="http://pxgrid.github.com/js-flipsnap/img/sample.png" alt="img"></div>
+				<div class="item"><img src="http://pxgrid.github.com/js-flipsnap/img/sample.png" alt="img"></div>
+				<div class="item"><img src="http://pxgrid.github.com/js-flipsnap/img/sample.png" alt="img"></div>
+			</div>
+		</div>
+		<script>
+		KISSY.use('gallery/slide/1.2/',function(S,Slide){
+			window.s = new Slide('#demo2',{
+				contentClass:'flipsnap',
+				pannelClass:'item',
+				effect:'hSlide',
+				speed:240,
+				//autoSlide:true,
+				touchmove:true
+			}).next();
+		});
+
+		</script>
+	</section>
+
+	<section class="demo" id="demo-distance">
+		<h3>多图</h3>
+		<style>
+		#demo3 {
+			width:300px;
+		}
+		#demo3 .item {
+			float:left;
+			width:120px;
+			height:150px;
+			margin:0px;
+			padding:0px;
+			border:0px;
+		}
+		#demo3 .flipsnap {
+			width:300px !important;
+			position:relative;
+			padding:0px;
+			height:150px !important;
+		}
+		.jay {
+			width:90px;height:90px;
+			border: 5px solid #999;
+			margin:10px auto;
+		}
+
+		</style>
+		<div id="demo3" class="viewport">
+			<div class="flipsnap">
+				<div class="item">
+					<div class="jay"><textarea class="data-lazyload">1</textarea></div>
+				</div>
+				<div class="item">
+					<div class="jay"><textarea class="data-lazyload">2</textarea></div>
+				</div>
+				<div class="item">
+					<div class="jay"><textarea class="data-lazyload">3</textarea></div>
+				</div>
+				<div class="item">
+					<div class="jay"><textarea class="data-lazyload">4</textarea></div>
+				</div>
+				<div class="item">
+					<div class="jay"><textarea class="data-lazyload">5</textarea></div>
+				</div>
+				<div class="item">
+					<div class="jay">6</div>
+				</div>
+				<div class="item">
+					<div class="jay">7</div>
+				</div>
+				<div class="item">
+					<div class="jay">8</div>
+				</div>
+				<div class="item">
+					<div class="jay">9</div>
+				</div>
+			</div>
+		</div>
+		<p class="controls">
+			<button class="mul-add">add</button>
+			<button class="mul-remove">remove</button>
+			<button class="mul-prev">prev</button>
+			<button class="mul-next">next</button>
+		</p>
+		<script>
+		KISSY.use('gallery/slide/1.2/',function(S,Slide){
+			var s = new Slide('#demo3',{
+				contentClass:'flipsnap',
+				pannelClass:'item',
+				speed:340,// 速度可以调整，单位ms
+				effect:'hSlide',
+				//autoSlide:true,
+				touchmove:true,
+				colspan:3
+			});
+			S.one('.controls .mul-add').on('click',function(e){
+				s.add(S.Node('<div class="item"><div class="jay">'+(s.length + 1)+'</div></div>'));
+			});
+			S.one('.controls .mul-remove').on('click',function(e){
+				s.remove(s.length - 1);
+			});
+			S.one('.controls .mul-next').on('click',function(e){
+				if(!s.is_last()){
+					s.next();
+				}
+			});
+			S.one('.controls .mul-prev').on('click',function(e){
+				if(!s.is_first()){
+					s.previous();
+				}
+			});
+		});
+
+		</script>
+	</section>
+
+
+
+	<section class="demo" id="demo-moveend">
+		<h3>trigger</h3>
+		<style>
+			#pointer .viewport {
+				position:relative;
+				padding:0px;
+				width:320px;
+			}
+			#pointer .flipsnap {
+				padding:0px;
+				width:auto;
+			}
+			#pointer .viewport .flipsnap .item {
+				padding:0 0;
+				margin:0 0;
+				border:0px;
+			}
+
+		</style>
+		<div id="pointer">
+			<div class="viewport">
+				<div class="flipsnap">
+					<div class="item">
+						<div class="jay">1</div>	
+					</div>
+					<div class="item">
+						<div class="jay">2</div>	
+					</div>
+					<div class="item">
+						<div class="jay">3</div>	
+					</div>
+					<div class="item">
+						<div class="jay">4</div>	
+					</div>
+					<div class="item">
+						<div class="jay">5</div>	
+					</div>
+				</div>
+			</div>
+			<div class="pointer">
+				<span class="current"></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</div>
+		<script>
+		KISSY.use('gallery/slide/1.2/',function(S,Slide){
+			window.s = new Slide('#pointer',{
+				contentClass:'viewport',
+				pannelClass:'item',
+				navClass:'pointer',
+				triggerSelector:'span',
+				defaultTab:2,
+				selectedClass:'current',
+				speed:340,// 速度可以调整，单位ms
+				effect:'hSlide',
+				//autoSlide:true,
+				touchmove:true
+			});
+		});
+
+		</script>
+	</section>
+
+	<section class="demo" id="demo-refresh">
+		<h3>增加删除帧</h3>
+			<style>
+			#demo-jk .item {
+				float:left;
+				width:310px !important;
+				margin:0;
+			}
+			#demo-jk .flipsnap {
+				overflow:hidden;
+				width:320px !important;
+				position:relative;
+				height:186px !important;
+			}
+
+			</style>
+			<div id="demo-jk" class="viewport">
+				<div class="flipsnap">
+					<div class="item">1</div>
+				</div>
+			</div>
+		<p class="controls">
+			<button class="prev">prev</button>
+			<button class="next">next</button>
+			<button class="add">add</button>
+			<button class="remove">remove</button>
+		</p>
+			<script>
+			KISSY.use('gallery/slide/1.2/',function(S,Slide){
+				var s = new Slide('#demo-jk',{
+					contentClass:'flipsnap',
+					pannelClass:'item',
+					speed:240,
+					effect:'hSlide',
+					touchmove:true
+				});
+				S.one('.controls .add').on('click',function(e){
+					s.add(S.Node('<div class="item">'+(s.length + 1)+'</div>'));
+				});
+				S.one('.controls .remove').on('click',function(e){
+					s.remove(s.length - 1);
+				});
+				S.one('.controls .next').on('click',function(e){
+					if(!s.is_last()){
+						s.next();
+					}
+				});
+				S.one('.controls .prev').on('click',function(e){
+					if(!s.is_first()){
+						s.previous();
+					}
+				});
+			});
+
+			</script>
+	</section>
+
+
+
+
+</section>
+
+
+<!-- /div.main --></div>
+
+<!-- /div.all --></div>
+
+<a href="http://github.com/jayli/slide/" target="_blank" class="github-ribbon"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+</body>
+</html>
