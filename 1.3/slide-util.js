@@ -66,7 +66,7 @@ KISSY.add('gallery/slide/1.3/slide-util',function(S){
 			var self = this;
 			var re_script = new RegExp(/<script([^>]*)>([^<]*(?:(?!<\/script>)<[^<]*)*)<\/script>/ig); // 防止过滤错误
 
-			var hd = S.one('head').getDOMNode(),
+			var hd = S.one('head')[0],
 				match, attrs, srcMatch, charsetMatch,
 				t, s, text,
 				RE_SCRIPT_SRC = /\ssrc=(['"])(.*?)\1/i,

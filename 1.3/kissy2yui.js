@@ -5,7 +5,8 @@ KISSY.add('gallery/slide/1.3/kissy2yui',function(S){
 	"use strict";
 
 	// KISSY 2 YUI3
-	S.augment(S.Node,{
+	var Host = S.config('mini')?S.Node.node : S.Node;
+	S.augment(Host,{
 
 		_delegate:function(){
 			var self = this;
