@@ -75,7 +75,7 @@ KISSY.add('gallery/slide/1.3/slide-util',function(S){
 			var self = this;
 			var re_script = new RegExp(/<script([^>]*)>([^<]*(?:(?!<\/script>)<[^<]*)*)<\/script>/ig); // 防止过滤错误
 
-			var hd = S.one('head').getDOMNode(),
+			var hd = S.one('head')[0],
 				match, attrs, srcMatch, charsetMatch,
 				t, s, text,
 				RE_SCRIPT_SRC = /\ssrc=(['"])(.*?)\1/i,
@@ -1800,13 +1800,15 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					if(self.transitions){
 						if(doeffect){
 							self.anim = S.one(self.animwrap).animate({
-								'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
+								'-webkit-transition-duration': (self.speed) + 's',
 								'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
 								'-webkit-backface-visibility':'hidden',
 								opacity:1
-							},self.speed ,self.easing,function(){
-								afterSwitch();
+							},S.config('mini')? self.speed: 0.001 ,self.easing,function(){
 							});
+							setTimeout(function(){
+								afterSwitch();
+							},self.speed * 1000);
 							// self.anim.run();
 						} else {
 							afterSwitch();
@@ -1834,14 +1836,15 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 
 						if(doeffect){
 							self.anim = S.one(self.animwrap).animate({
-								'-webkit-transition-duration': doeffect?self.speed :'0' + 's',
+								'-webkit-transition-duration': self.speed + 's',
 								'-webkit-transform':'translate3d('+(-1 * index * self.animcon.get('region').width / self.colspan)+'px,0,0)',
 								'-webkit-backface-visibility':'hidden',
 								opacity:1
-							}, self.speed ,self.easing,function(){
-								afterSwitch();
+							}, S.config('mini')?self.speed:0.001 ,self.easing,function(){
 							});
-							// self.anim.run();
+							setTimeout(function(){
+								afterSwitch();
+							},self.speed * 1000);
 						} else {
 							afterSwitch();
 						}
