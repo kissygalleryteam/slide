@@ -3,6 +3,8 @@
 
 @author: 拔赤
 
+![](http://gtms01.alicdn.com/tps/i1/T1G1SoFxpXXXaGvaAA-429-201.jpg)
+
 支持移动终端的选项卡切换控件，支持 KISSY MINI，对触屏做大量优化，动画流畅。兼容性
 
 - [Slide 1.2](http://gallery.kissyui.com/slide/1.2/guide/index.html) => KISSY 1.4.x & 1.3.x（基于1.3时请手动引入sizzle模块）
