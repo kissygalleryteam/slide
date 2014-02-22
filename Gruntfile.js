@@ -72,6 +72,9 @@ module.exports = function(grunt) {
 					servlet:'?',
 					separator:',',
 					charset:'gbk', // 输出文件的编码
+					hosts:{
+						"g.assets.daily.taobao.net":"10.235.136.37"
+					},
 					// 默认将"-min"文件映射到源文件
 					filter:{
 						'-min\\.js':'.js'
@@ -87,6 +90,9 @@ module.exports = function(grunt) {
                     proxyHosts:['demo'],
                     servlet:'?',
                     separator:',',
+					hosts:{
+						"g.assets.daily.taobao.net":"10.235.136.37"
+					},
                     charset:'gbk', 
                     filter:{
                         '-min\\.js':'.js'
