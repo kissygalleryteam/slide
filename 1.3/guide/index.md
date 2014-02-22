@@ -6,8 +6,12 @@
 
 支持移动终端的选项卡切换控件，支持 KISSY MINI，对触屏做大量优化，动画流畅。兼容性
 
-- [Slide 1.2](http://gallery.kissyui.com/slide/1.2/guide/index.html) => KISSY 1.4.x & 1.3.x（基于1.3时请手动引入sizzle模块）
-- [Slide 1.3](http://gallery.kissyui.com/slide/1.3/guide/index.html) => KISSY MINI & 1.4.x & 1.3.x（基于1.3时请手动引入sizzle模块）
+- [Slide 1.2](http://gallery.kissyui.com/slide/1.2/guide/index.html) => KISSY 1.4.x & 1.3.x
+- [Slide 1.3](http://gallery.kissyui.com/slide/1.3/guide/index.html) => KISSY MINI & 1.4.x & 1.3.x
+
+注意：slide 1.3 如果依赖 KISSY 1.3.0 ，需要手动载入sizzle 模块，否则会报错
+
+![](http://gtms04.alicdn.com/tps/i4/T103SnFzVaXXa.egfv-257-22.png)
 
 ### v1.3 Change LOG
 
