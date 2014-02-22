@@ -1,5 +1,4 @@
 ## Slide
-<style>em{background:lightgray} code {background:null;border:null}</style>
 
 @author: 拔赤
 
