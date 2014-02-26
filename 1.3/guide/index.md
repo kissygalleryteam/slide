@@ -1,6 +1,5 @@
 ## Slide
 
-
 ![](http://gtms01.alicdn.com/tps/i1/T1G1SoFxpXXXaGvaAA-429-201.jpg)
 
 by 拔赤，支持移动终端的选项卡切换控件，支持 KISSY MINI，对触屏做大量优化，动画流畅。兼容性
