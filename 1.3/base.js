@@ -1451,8 +1451,6 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.effect = 'hSlide';// TODO 目前跑马灯只支持横向滚动
 			}
 
-			console.log(self.defaultTab);
-
 			self.currentTab = self.defaultTab;//0,1,2,3...
 
 			//判断是否开启了内置动画
