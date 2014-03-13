@@ -14,7 +14,6 @@ by 拔赤，支持移动终端的选项卡切换控件，支持 KISSY MINI，对
 ### v1.3 Change LOG
 
 - 支持 KISSY MINI，并保持向下兼容
-- 删除配置 carousel
 - 体积：6k => 5k
 
 ## 开始使用
@@ -92,7 +91,20 @@ Slide依赖典型的HTML结构
 		hoverStop:true//鼠标经过内容是否停止播放
 	});
 
-1.2 支持跑马灯，1.3 不支持跑马灯效果。
+## 跑马灯原理
+
+该Slide支持跑马灯效果，跑马灯是可以连续相同方向滚动的幻灯，帧首尾相连接。有两种实现方式，一种是滚动时将首（尾）的节点拷贝至尾（首），另一种是初始化时处理首尾的节点，滚动时只改变位置，出于性能的考虑，这里选用第二种方式。
+
+
+由于窗口滑块所容纳的帧数可变，因此，需要同时复制多个帧至首位，数量根据Slide组件的colspan参数指定，比如，colspan参数默认为1，即滑块只容纳一个帧，首尾各复制一份。如果colspan为2，则滑块的跨度为2，复制两分，如图：
+
+![](http://img02.taobaocdn.com/tps/i2/T1xl62Xb0fXXXcUVob-597-199.png)
+
+切换幻灯的动作实际上是滑块移动的操作，滑块定位在初始位置由参数defaultTab指定，默认为0，如果colspan指定了跨度为2，则滑块初始位置为：
+
+![](http://img01.taobaocdn.com/tps/i1/T1Cj61XcJkXXXuXRQf-599-148.png)
+
+如果Slide不是跑马灯效果，则和基本的Tab切换原理一样，无须复制节点
 
 <hr class="smooth large" />
 
@@ -181,7 +193,7 @@ tab面板的className，默认为tab-pannel
 
 *carousel* (Boolean)
 
-跑马灯效果，1.2 支持跑马灯，1.3不支持，1.2 中默认为false
+跑马灯效果，默认为false
 
 *touchmove* (Boolean)	
 
@@ -269,7 +281,7 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 切换完成的动作
 
-> 在Slide 1.2中，如果当Slide为跑马灯，且colspan大于1，则回调函数中的index值的取值可能会有偏差，原则上不推荐这种模式下获取当前帧的index
+> 在Slide 1.3中，如果当Slide为跑马灯，且colspan大于1，则回调函数中的index值的取值可能会有偏差，原则上不推荐这种模式下获取当前帧的index
 
 <hr class="smooth" />
 
@@ -428,7 +440,7 @@ JS代码：
 	KISSY.use('gallery/slide/1.3/',function(S,Slide){
 		new Slide('JSlide',{
 			effect:'hSlide', //水平切换
-			// carousel:true, // 跑马灯，Slide 1.2 支持，1.3 不支持
+			carousel:true, // 跑马灯
 			colspan:3 // 定义跨度为3
 		});
 	});
@@ -482,7 +494,7 @@ HTML代码：
 JS 代码：
 
 	<script>
-	KISSY.use('gallery/slide/1.1/',function(S,Slide){
+	KISSY.use('gallery/slide/1.3/',function(S,Slide){
 		new Slide('slides',{
 			autoSlide:false,
 			effect:'hSlide',

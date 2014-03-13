@@ -317,6 +317,13 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.next = _t;
 			}
 
+			// 在移动终端中的优化
+			if(self.carousel){
+				for(var i = 0;i<self.colspan;i++){
+					self.fix_for_transition_when_carousel(i*2);
+				}
+			}
+
 			self.fixSlideSize();
 
 			// LayerSlide 效果增强
@@ -650,8 +657,13 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 
 			self.doEffectInit();
 
-			self.fixSlideSize(self.currentTab);
-			self.highlightNav(self.getWrappedIndex(self.currentTab));
+			if(self.carousel){
+				self.fixSlideSize(self.currentTab - self.colspan);
+				self.highlightNav(self.currentTab - self.colspan);
+			} else {
+				self.fixSlideSize(self.currentTab);
+				self.highlightNav(self.getWrappedIndex(self.currentTab));
+			}
             //添加选中的class
             //是否自动播放
             if (self.autoSlide === true) {
@@ -858,7 +870,22 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 		getWrappedIndex:function(index){
 			var self = this,wrappedIndex = 0;
 
-			wrappedIndex = index;
+			if(index === 0){
+				//debugger;
+			}
+			if(self.carousel){
+				
+				if(index < self.colspan){
+					wrappedIndex = self.length - self.colspan * 3 + index; 
+				} else if(index >= self.length - self.colspan) {
+					wrappedIndex = index - (self.length - self.colspan);
+				} else {
+					wrappedIndex = index - self.colspan;
+				}
+
+			}else{
+				wrappedIndex = index;
+			}
 			return wrappedIndex;
 		},
 
@@ -944,6 +971,9 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					e.preventDefault();
 					self.massTrigger(function(el){
 						var ti = Number(self.tabs.indexOf(el));
+						if(self.carousel){
+							ti = (ti + 1) % self.length;
+						}
 						self.go(ti);
 						if(self.autoSlide){
 							self.stop().play();
@@ -993,6 +1023,12 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.con._delegate('touchstart',function(e){
 					self.stop();
 					self.touching = true;
+					if(self.is_last() && self.carousel){
+						self.fix_next_carousel();
+					}
+					if(self.is_first() && self.carousel){
+						self.fix_pre_carousel();
+					}
 					self.startX = e.changedTouches[0].clientX;
 					self.startY = e.changedTouches[0].clientY;
 					self.animwrap.setStyles({
@@ -1009,7 +1045,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					var swipeleft = (Math.abs(endX) < Math.abs(self.startX));//是否是向左滑动
 					var swiperight = !swipeleft;
 					//判断是否在边界反滑动，true，出现了反滑动，false，正常滑动
-					var anti = ( self.is_last() && swipeleft || self.is_first() && swiperight );
+					var anti = self.carousel ? false : ( self.is_last() && swipeleft || self.is_first() && swiperight );
 
 					//复位
 					var reset = function(){
@@ -1065,10 +1101,12 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					if(		!anti && (
 								// 支持touchmove，跑马灯效果，任意帧，touchmove足够的距离
 								( self.touchmove && (self.deltaX > width / 3) ) ||
+								// 不支持touchmove，跑马灯
+								( !self.touchmove && self.carousel ) ||
 								// 正常tab，支持touchmove，横向切换
-								( self.touchmove && self.effect == 'hSlide' ) || 
+								( !self.carousel && self.touchmove && self.effect == 'hSlide' ) || 
 								// 不支持touchmove，不支持跑马灯
-								( !self.touchmove ) ||
+								( !self.touchmove && !self.carousel) ||
 								//快速手滑
 								( Number(new Date()) - self.startT < 550 )
 							)
@@ -1106,7 +1144,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 						//判断是否在边界反滑动，true，出现了反滑动，false，正常滑动
 						var anti = ( self.is_last() && self.deltaX < 0 || self.is_first() && self.deltaX > 0 );
 
-						if(self.effect == 'hSlide' && anti){
+						if(!self.carousel && self.effect == 'hSlide' && anti){
 							self.deltaX = self.deltaX / 3; //如果是边界反滑动，则增加阻尼效果
 						}
 
@@ -1601,7 +1639,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 
 			S.each({
 				autoSlide:		false,
-				speed:			500,//ms
+				speed:			300,//ms
 				timeout:		3000,
 				effect:			'none',
 				eventType:		'click',
@@ -1617,7 +1655,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				// before_switch:	new Function,
 				carousel:		false, // 不支持
 				reverse:		false,
-				touchmove:		false,
+				touchmove:		true,
 				adaptive_fixed_width:false,
 				adaptive_fixed_height:false,
 				adaptive_fixed_size:false,
@@ -1648,12 +1686,64 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.defaultTab = Number(self.defaultTab) - 1; // 默认隐藏所有pannel
 			}
 
+			// 如果是跑马灯，则不考虑默认选中的功能，一律定位在第一页,且只能是左右切换的不支持上下切换
+			if(self.carousel){
+				self.defaultTab = 0;
+				self.defaultTab = self.colspan + (self.defaultTab); //跑马灯显示的是真实的第二项
+				self.effect = 'hSlide';// TODO 目前跑马灯只支持横向滚动
+			}
+
+			console.log(self.defaultTab);
+
 			self.currentTab = self.defaultTab;//0,1,2,3...
 
 			//判断是否开启了内置动画
 			self.transitions = ( "webkitTransition" in document.body.style && self.webkitOptimize );
 
             return self;
+		},
+		//针对移动终端的跑马灯的hack
+		//index 移动第几个,0,1,2,3
+		fix_for_transition_when_carousel: function(index){
+			var self = this;
+			if(typeof index == 'undefined'){
+				index = 0;
+			}
+			var con = self.con;
+            self.animcon = self.con.one('.' + self.contentClass);
+			self.animwrap = self.animcon.one('div');
+			self.pannels = con.all('.' + self.contentClass + ' .' + self.pannelClass);
+			if(self.effect == 'hSlide'){
+				var width = Number(self.animcon.get('region').width / self.colspan);
+				var height = Number(self.animcon.get('region').height);
+				self.animwrap.setStyle('width',self.pannels.size() * width + 2 * width);
+				var first = self.pannels.item(index).cloneNode(true);
+				var last = self.pannels.item(self.pannels.size()- 1 - index).cloneNode(true);
+				self.animwrap.append(first);
+				self.animwrap.prepend(last);
+				if(self.defaultTab === 0){
+					var offset_width = -1 * width * (index/2 + 1 + self.defaultTab -1);
+				} else {
+					var offset_width = -1 * width * (index/2 + 1);
+				}
+				if(self.transitions){
+					//这步操作会手持终端中造成一次闪烁,待解决
+					self.animwrap.setStyles({
+						'-webkit-transition-duration': '0s',
+						'-webkit-transform':'translate3d('+offset_width+'px,0,0)',
+						'-webkit-backface-visibility':'hidden',
+						'left':'0'
+					});
+				}else {
+					self.animwrap.setStyle('left',offset_width);
+				}
+			}
+			//重新获取重组之后的tabs
+			self.pannels = con.all('.' + self.contentClass + ' .' + self.pannelClass);
+			self.length = self.pannels.size();
+
+			return this;
+
 		},
 
 		// 是否在做动画过程中
@@ -1670,6 +1760,15 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				_index = _index % (self.length - self.colspan + 1);
 			}
 
+			if(self.carousel){
+
+				if(self.is_first()){
+					self.fix_pre_carousel();
+					self.previous.call(self);
+					// arguments.callee.call(self);
+					return this;
+				}
+			}
 			self.go(_index,callback);
 			return this;
 		},
@@ -1698,12 +1797,91 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			if(_index >= (self.length - self.colspan + 1)){
 				_index = _index % (self.length - self.colspan + 1);
 			}
+			if(self.carousel){
+
+				if(self.is_last()){
+					self.fix_next_carousel();
+					self.next.call(self);
+					// arguments.callee.call(self);
+					return this;
+
+				}
+
+			}
 			self.go(_index,callback);
 			return this;
+		},
+		// 修正跑马灯结尾的滚动位置
+		fix_next_carousel:function(){
+			var self = this;
+
+			self.currentTab = self.colspan;
+			var con = self.con;
+			if(self.effect != 'none'){
+				self.pannels = con.all('.'+self.contentClass+' .'+self.pannelClass);
+			}
+
+			//目标offset，'-234px'
+			var dic = '-' + Number(self.animcon.get('region').width ).toString()+'px';
+
+			if(self.effect == 'hSlide'){
+
+				if(self.transitions){
+					self.animwrap.setStyles({
+						'-webkit-transition-duration': '0s',
+						'-webkit-transform':'translate3d('+dic+',0,0)'
+					});
+
+				}else{
+					self.animwrap.setStyle('left',dic);
+				}
+			} else if (self.effect == 'vSlide'){
+				// 暂不支持纵向跑马灯的滚动
+
+			}
+
+			return;
+
+		},
+
+		// 修正跑马灯开始的滚动位置
+		fix_pre_carousel:function(){
+			var self = this;
+
+			// jayli 这里需要调试修正，继续调试
+			self.currentTab = self.length - 1 - self.colspan * 2 + 1;
+			var con = self.con;
+			if(self.effect != 'none'){
+				self.pannels = con.all('.'+self.contentClass+' .'+self.pannelClass);
+			}
+			// 目标offset,是一个字符串 '-23px'
+			var dic = '-' + (Number(self.animcon.get('region').width / self.colspan) * (self.currentTab)).toString() + 'px';
+
+			if(self.effect == 'hSlide'){
+				if(self.transitions){
+					self.animwrap.setStyles({
+						'-webkit-transition-duration': '0s',
+						'-webkit-transform':'translate3d('+dic +',0,0)'
+					});
+
+				}else{
+					self.animwrap.setStyle('left',dic);
+				}
+			}else if (self.effect == 'vSlide'){
+				//竖向滚动暂时未实现
+
+			}
+
+			return;
+
 		},
 		//高亮显示第index(0,1,2,3...)个nav
 		highlightNav:function(index){
 			var self = this;
+			// 同时是跑马灯，且一帧多元素，则不允许存在Nav
+			if(self.carousel && self.colspan > 1){
+				return this;
+			}
 			if(self.tabs.item(index)){
 				self.tabs.removeClass(self.selectedClass);
 				self.tabs.item(index).addClass(self.selectedClass);
@@ -1718,6 +1896,10 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 		// 非高亮显示 index(0,1,2,3...)个nav
 		unhighlightNav:function(index){
 			var self  = this;
+			// 同时是跑马灯，且一帧多元素，则不允许存在Nav
+			if(self.carousel && self.colspan > 1){
+				return this;
+			}
 			if(self.tabs.item(index)){
 				self.tabs.removeClass(self.selectedClass);
 				// self.tabs.item(index).addClass(self.selectedClass);
@@ -1798,6 +1980,11 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				'vSlide':function(index){
 
 					if(self.transitions){
+						self.animwrap.setStyles({
+							'-webkit-transition-duration': (doeffect ? self.speed : '0') + 's',
+							'-webkit-transform':'translate3d(0,'+(-1 * index * self.animcon.get('region').height / self.colspan)+'px,0)',
+							'-webkit-backface-visibility':'hidden'
+						});
 						if(doeffect){
 							self.anim = S.one(self.animwrap).animate({
 								'-webkit-transition-duration': (self.speed) + 's',
@@ -1885,7 +2072,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 						opacity: 1
 					},self.speed,self.easing,function(){
 
-						console.log(_curr);
+						//console.log(_curr);
 						self.pannels.item(_curr).setStyle('zIndex', 0);
 						self.pannels.item(index).setStyle('zIndex', 1);
 						self.pannels.item(_curr).setStyle('opacity', 0);

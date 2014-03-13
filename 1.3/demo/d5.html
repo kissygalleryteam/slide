@@ -104,10 +104,12 @@
 		selectedClass:'current',
 		triggerSelector:'a',
 		effect:'hSlide',
-		touchmove:true,
 		carousel:true,
+		touchmove:true,
 		colspan:3
 
+		}).on('afterSwitch',function(e){
+		
 	});
 	var ctl = S.one('#JSlide-ctrl');
 	ctl.one('.play').on('click',function(){
