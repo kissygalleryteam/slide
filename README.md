@@ -1,11 +1,6 @@
 ## slide
 
-* 版本：1.1
+* 版本：1.3
 
-Demo 的进一步说明
-
-1，响应式
-2，尺寸大小变化时的方法调用
-3，用css3做动画时，slide以外闪屏的问题
-
+<http://gallery.kissyui.com/slide/1.3/guide/index.html>
 

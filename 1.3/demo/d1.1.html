@@ -49,21 +49,19 @@
 <script>
     var S = KISSY;
 	var srcPath = "../../../";
-	if(S.debug){
-		S.config({
-			packages:[
-				{
-					name:"gallery",
-					path:srcPath,
-					charset:"utf-8",
-					combine:false,
-					tag:S.now(),
-					ignorePackageNameInUri:true,
-					debug:true
-				}
-			]
-		});
-	}
+	S.config({
+		packages:[
+			{
+				name:"gallery",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
 	
 KISSY.use('gallery/slide/1.3/',function(S,Slide){
 	new Slide('Jtab',{

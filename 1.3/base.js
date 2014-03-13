@@ -932,17 +932,19 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					},'.'+self.contentClass); 
 
 					// TODO 触屏设备中的AnimEnd事件的实现
-					self.animwrap.on('webkitTransitionEnd',function(){
-						
-						/*
-						self.fire('afterSwitch',{
-							index: index,
-							navnode: self.tabs.item(self.getWrappedIndex(index)),
-							pannelnode: self.pannels.item(index)
+					if(self.animwrap){
+						self.animwrap.on('webkitTransitionEnd',function(){
 							
-						});	
-						*/
-					}); 
+							/*
+							self.fire('afterSwitch',{
+								index: index,
+								navnode: self.tabs.item(self.getWrappedIndex(index)),
+								pannelnode: self.pannels.item(index)
+								
+							});	
+							*/
+						}); 
+					}
 				}
 
 			}
