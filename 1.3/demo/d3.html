@@ -158,21 +158,19 @@ body {
 	
 KISSY.use('gallery/slide/1.3/index',function(S,Slide){
 	var C = new Slide('slides',{
-		//autoSlide:true,
-		effect:'hSlide',
-		timeout:3000,
-		speed:700,
-		invisibleStop:true,
-		eventType:'mouseover',
-		triggerDelay:400,
-		//carousel:true,
-		//defaultTab:5,
-		selectedClass:'current',
-		carousel:true,
-		touchmove:true
+			//autoSlide:true,
+			effect:'hSlide',
+			timeout:3000,
+			speed:300,
+			invisibleStop:true,
+			eventType:'mouseover',
+			triggerDelay:400,
+			//carousel:true,
+			defaultTab:5,
+			selectedClass:'current',
+			carousel:true,
+			touchmove:true
 		}).on('afterSwitch',function(){
-			console.log(2222);
-		
 		});
 	S.one('#J_pre').on('click',function(e){
 		e.halt();
