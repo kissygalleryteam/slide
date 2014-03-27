@@ -1217,7 +1217,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 							}
 						}else{
 							// 页面可见 && slide在视野内 && 停止播放前slide播放状态是‘正在播放’ 满足这三个条件继续播放
-							if(self.isSlideVisible()&&autoPlayPageVisible){
+							if(self.isSlideVisible()&&autoPlayPageVisible ){
 								self.play();
 								//console.info('触发事件:'+e.type+'   '+'播放状态：play');
 							}
