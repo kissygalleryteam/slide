@@ -1911,6 +1911,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			self.timer = setTimeout(function(){
 				self.next().play();
 			},Number(self.timeout));
+			self.autoSlide = true;
 			return this;
 		},
 		//停止自动播放
@@ -1918,6 +1919,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			var self = this;
 			clearTimeout(self.timer);
 			self.timer = null;
+			self.autoSlide = false;
 			return this;
 		}
 	});
