@@ -331,6 +331,8 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.initLayer();
 			}
 
+			self.stoped = null;
+
 			// 渲染当前帧的lazyload的内容
 			self.renderPannelTextarea(self.currentTab);
 
@@ -975,7 +977,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 							ti = (ti + 1) % self.length;
 						}
 						self.go(ti);
-						if(self.autoSlide){
+						if(self.autoSlide && self.stoped === false){
 							self.stop().play();
 						}
 					},e.currentTarget);
@@ -987,12 +989,16 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				self.con._delegate('mouseover',function(e){
 					//e.halt();
 					self.isMouseover = true;		// 增加对鼠标状态的标识
-					if(self.autoSlide)self.stop();
+					if(self.autoSlide){
+						var stoped = self.stoped;
+						self.stop();
+						self.stoped = stoped;
+					}
 				},'.'+self.contentClass+' .'+self.pannelClass);
 				self.con._delegate('mouseout',function(e){
 					//e.halt();
 					self.isMouseover = false;
-					if(self.autoSlide)self.play();
+					if(self.autoSlide && self.stoped === false)self.play();
 				},'.'+self.contentClass+' .'+self.pannelClass);
 			}
 
@@ -1121,7 +1127,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 						reset();
 					}
 
-					if(self.autoSlide){
+					if(self.autoSlide && self.stoped === false){
 						self.play();
 					}
 				},'.'+self.contentClass);
@@ -1942,7 +1948,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			});
 
 			self.fixSlideSize(index);
-			if(self.autoSlide){
+			if(self.autoSlide && self.stoped === false){
 				self.stop().play();
 			}
             if (index >= self.length) {
@@ -2153,7 +2159,8 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			self.timer = setTimeout(function(){
 				self.next().play();
 			},Number(self.timeout));
-			self.autoSlide = true;
+			self.stoped = false;
+			// self.autoSlide = true;
 			return this;
 		},
 		//停止自动播放
@@ -2161,7 +2168,8 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 			var self = this;
 			clearTimeout(self.timer);
 			self.timer = null;
-			self.autoSlide = false;
+			self.stoped = true;
+			// self.autoSlide = false;
 			return this;
 		}
 	});
