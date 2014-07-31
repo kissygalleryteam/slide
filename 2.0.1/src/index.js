@@ -1,6 +1,6 @@
 
 
-KISSY.add('kg/slide/2.0.0/index',function(S,BSlide){
+KISSY.add('kg/src/index',function(S,BSlide){
 
 	return BSlide;
 

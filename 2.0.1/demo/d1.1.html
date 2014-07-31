@@ -48,7 +48,23 @@
 </style>
 <script>
 		
-KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	var S = KISSY;
+	var srcPath = "../";
+	S.config({
+		packages:[
+			{
+				name:"kg",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
+	
+KISSY.use('kg/src/',function(S,Slide){
 	new Slide('Jtab',{
 		eventType:'mouseover'
 	}).on('beforeTailSwitch',function(e){

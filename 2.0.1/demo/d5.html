@@ -78,24 +78,22 @@
 <script>
 
     var S = KISSY;
-	var srcPath = "../../../";
-	if(S.debug){
-		S.config({
-			packages:[
-				{
-					name:"gallery",
-					path:srcPath,
-					charset:"utf-8",
-					combine:false,
-					tag:S.now(),
-					ignorePackageNameInUri:true,
-					debug:true
-				}
-			]
-		});
-	}
+	var srcPath = "../";
+	S.config({
+		packages:[
+			{
+				name:"kg",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:S.now(),
+				ignorePackageNameInUri:true,
+				debug:true
+			}
+		]
+	});
 	
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/src/',function(S,Slide){
 	window.s = new Slide('JSlide',{
 		// eventType:'click',
 		navClass:'scrollable-trigger',

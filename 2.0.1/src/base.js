@@ -9,7 +9,7 @@
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add('kg/slide/2.0.0/base',function(S){
+KISSY.add('kg/src/base',function(S){
 
 	"use strict";
 

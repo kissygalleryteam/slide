@@ -99,11 +99,11 @@
 </body>
 <script>
     var S = KISSY;
-	var srcPath = "../../../";
+	var srcPath = "../";
 	S.config({
 		packages:[
 			{
-				name:"gallery",
+				name:"kg",
 				path:srcPath,
 				charset:"utf-8",
 				combine:false,
@@ -114,7 +114,7 @@
 		]
 	});
 
-	KISSY.use('gallery/slide/1.2/',function(S,Slide){
+	KISSY.use('kg/src/',function(S,Slide){
 
 		new Slide('J_tab_1',{
 			autoSlide:false,
