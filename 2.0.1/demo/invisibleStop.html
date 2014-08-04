@@ -81,19 +81,22 @@ body {
 <div style="height:1000px;width:1px"></div>
 
 <script>
-    var srcPath = "../src/";
+    var srcPath = "../";
     KISSY.config({
         packages:[
             {
-                name:"kg/offline/2.0.0",
-                path:srcPath,
-                charset:"utf-8",
-                ignorePackageNameInUri:true
+                name:"kg",
+				path:srcPath,
+				charset:"utf-8",
+				combine:false,
+				tag:KISSY.now(),
+				ignorePackageNameInUri:true,
+				debug:true
             }
         ]
     });
 	
-KISSY.use('kg/slide/2.0.0/index',function(S,Slide){
+KISSY.use('kg/src/',function(S,Slide){
 	var C = new Slide('slides',{
 		autoSlide:true,
 		effect:'hSlide',
