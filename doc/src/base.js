@@ -766,11 +766,27 @@ KISSY.add('kg/src/base',function(S){
 				self.relocateCurrentTab();
 			});
 
-			// 绑定判断switch发生的时机
+			/*
+			* 枫刀修改：绑定beforeSwitch事件。如果self.before_switch是一个回调函数，
+			* 则执行并返回该回调函数的返回值；如果self.before_switch是一个布尔值，则
+			* 返回self.before_switch；如果未指定self.before_switch，则返回true。
+			* self._executeSwitch属性用于临时保存回调函数的返回值。
+			* */
 			self.on('beforeSwitch',function(o){
-				if(this.layerSlide && this.isAming()){
+                if(typeof self.before_switch == 'function'){
+                    self._executeSwitch = self.before_switch();
+                    return self._executeSwitch;
+                } else if (typeof self.before_switch == 'boolean'){
+                    self._executeSwitch = self.before_switch;
+                    return self.before_switch;
+                } else {
+                    self._executeSwitch = true;
+                    return true;
+                }
+
+				/*if(this.layerSlide && this.isAming()){
 					return false;
-				}
+				}*/
 			});
 
 			//终端事件触屏事件绑定
@@ -1345,10 +1361,11 @@ KISSY.add('kg/src/base',function(S){
 			});
 
 			self.on('beforeSwitch',function(o){
-				if(o.index === self.currentTab){
+                //return self.before_switch();
+				/*if(o.index === self.currentTab){
 					return false;
 				}
-				self.subLayerRunin(o.index);
+				self.subLayerRunin(o.index);*/
 			});
 
 			self.on('beforeTailSwitch',function(o){
@@ -1418,7 +1435,7 @@ KISSY.add('kg/src/base',function(S){
 				triggerSelector:'li',
 				contentClass:	'tab-content',
 				pannelClass:	'tab-pannel',
-				// before_switch:	new Function,
+				before_switch:	true, //added by fengdao
 				carousel:		false, // 不支持
 				reverse:		false,
 				touchmove:		true,
@@ -1857,14 +1874,19 @@ KISSY.add('kg/src/base',function(S){
 			};
 
 			var doSwitch = function(){
-				
+                //console.log("self.before_switch:" + self.before_switch);
 				var goon = self.fire('beforeSwitch', {
 					index:index,
 					navnode:self.tabs.item(index),
 					pannelnode:self.pannels.item(index)
 				});
-
-				if(goon !== false){
+                //console.log(goon._executeSwitch);
+                /*
+                枫刀修改：如果goon._executeSwitch（即self._executeSwitch）不是false（可以是true,或其他值,或不指定），
+                则触发切换事件（switch事件）；否则阻止切换事件
+                 */
+				if(goon._executeSwitch !== false){
+                    //console.log(goon);
 					//发生go的时候首先判断是否需要整理空间的长宽尺寸
 					//self.renderSize(index);
 
@@ -1935,6 +1957,6 @@ KISSY.add('kg/src/base',function(S){
 	return BSlide;
 
 },{
-	requires:['node','json','event','anim','ua','./slide-util','./kissy2yui']	
+	requires:['node','json','event','anim','ua','./slide-util','./kissy2yui']
 });
 

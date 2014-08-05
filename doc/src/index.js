@@ -53,6 +53,7 @@ KISSY.add('kg/src/index',function(S,BSlide){
  * 								return document.body.offsetWidth;
  * 							}
  * 						});
+ * 		before_switch:{function}指定当beforeSwitch事件（“切换至”事件）触发时执行的回调函数，回调函数返回false可以阻止切换事件的发生。同时，before_switch还可以取布尔值，取true时正常触发切换事件，取false时阻止切换事件。该属性默认为true。代码示例参见demo/d4.html和demo/d5.html。
  *
  *
  * 	@event 事件
