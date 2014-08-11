@@ -204,7 +204,7 @@ tab面板的className，默认为tab-pannel
 屏幕是否根据控件的宽度改变重新渲染尺寸，默认为false，主要在组件定宽高的场景中，保证resize时tab-pannel尺寸正确
 
 *adaptive`_`fixed`_`height* (boolean) 
-
+autoSlide
 屏幕是否根据控件的高度改变重新渲染尺寸，默认为false,主要在组件定宽高的场景中，保证resize时tab-pannel尺寸正确
 
 *adaptive`_`fixed`_`size* (boolean) 
@@ -248,6 +248,10 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 *webkitOptimize* (Boolean)
 
 是否在webkit浏览器中开启硬件加速，默认为true，因为webkit在各平台中可能有bug，常需要临时性关闭移动设备中的硬件加速。
+
+*before_switch*（function）
+
+指定当beforeSwitch事件（“切换至”事件）触发时执行的回调函数，回调函数返回false可以阻止切换事件的发生。同时，before_switch还可以取布尔值，取true时正常触发切换事件，取false时阻止切换事件。该属性默认为true。代码示例参见demo/d4.html和demo/d5.html。
 
 <hr class="smooth" />
 

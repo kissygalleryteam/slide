@@ -47,8 +47,9 @@
 
 </style>
 <script>
-	var S = KISSY;
-	var srcPath = "../";
+	/*var S = KISSY;
+	//added by fengdao : srcPath即Slide根路径，取别名为'kg'
+	var srcPath = "http://g.tbcdn.cn/kg";
 	S.config({
 		packages:[
 			{
@@ -61,9 +62,35 @@
 				debug:true
 			}
 		]
-	});
+	});*/
+    var S = KISSY;
+    S.config({
+        packages:[
+            {
+                name:"kg",
+                path:"http://g.tbcdn.cn/kg/",
+                charset:"utf-8",
+                ignorePackageNameInUri:true
+            }
+        ]
+    });
 
-KISSY.use('kg/src/',function(S,Slide){
+    if (S.Config.debug) {
+        var srcPath = "../";
+        S.config({
+            packages:[
+                {
+                    name:"kg/demo/2.0.0",
+                    path:srcPath,
+                    charset:"utf-8",
+                    ignorePackageNameInUri:true
+                }
+            ]
+        });
+
+    }
+
+KISSY.use('kg/slide/2.0.0/index',function(S,Slide){
 	new Slide('Jtab',{
 		eventType:'mouseover'
 	}).on('beforeTailSwitch',function(e){

@@ -92,7 +92,7 @@
 		]
 	});
 	
-	KISSY.use('kg/src/',function(S,Slide){
+	KISSY.use('kg/index',function(S,Slide){
 	window.s = new Slide('JSlide',{
 		// eventType:'click',
 		navClass:'scrollable-trigger',
@@ -103,7 +103,9 @@
 		effect:'hSlide',
 		carousel:true,
 		touchmove:true,
-		colspan:3
+		colspan:3,
+        //added by fengdao
+        before_switch:true
 
 		}).on('afterSwitch',function(e){
 		

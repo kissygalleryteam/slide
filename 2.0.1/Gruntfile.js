@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	var task = grunt.task;
-    var SRC = 'src/';
+    var SRC = 'lib/';
     grunt.initConfig({
         // 配置文件，参考package.json配置方式，必须设置项是
         // name, version, author
@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                 ],
                 depFilePath: 'mods.js',
                 fixModuleName:true,
-                map: [["<%= pkg.name %>/src/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
+                map: [["<%= pkg.name %>/lib/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
             },
             main: {
                 files: [
@@ -67,6 +67,47 @@ module.exports = function(grunt) {
                         ext: '-min.js'
                     }
                 ]
+            }
+        },
+        // FlexCombo服务配置
+        // https://npmjs.org/package/grunt-flexcombo
+        flexcombo:{
+            // https://speakerdeck.com/lijing00333/grunt-flexcombo
+            debug:{
+                options:{
+                    proxyport:8080,
+                    target:'<%= pkg.version %>/build/',
+                    urls:'/s/kissy/gallery/<%= pkg.name %>/<%= pkg.version %>',
+                    port:'80',
+                    servlet:'?',
+                    separator:',',
+                    charset:'gbk', // 输出文件的编码
+                    hosts:{
+                        "g.assets.daily.taobao.net":"10.235.136.37"
+                    },
+                    // 默认将"-min"文件映射到源文件
+                    filter:{
+                        '-min\\.js':'.js'
+                    }
+                }
+            },
+            demo:{
+                options:{
+                    proxyport:8080,
+                    target:'<%= pkg.version %>/',
+                    urls:'/s/kissy/gallery/<%= pkg.name %>/<%= pkg.version %>',
+                    port:'80',
+                    proxyHosts:['demo'],
+                    servlet:'?',
+                    separator:',',
+                    hosts:{
+                        "g.assets.daily.taobao.net":"10.235.136.37"
+                    },
+                    charset:'gbk',
+                    filter:{
+                        '-min\\.js':'.js'
+                    }
+                }
             }
         },
         less: {
@@ -109,7 +150,7 @@ module.exports = function(grunt) {
         watch: {
             'all': {
                 files: [
-					'./src/**/*.css',
+					'./lib/**/*.css',
 					'!./build/**/*'
 				],
                 tasks: [ 'build' ]
@@ -159,12 +200,23 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-flexcombo');
     grunt.loadNpmTasks('grunt-contrib-less');
 
 
 	grunt.registerTask('build', '默认构建任务', function() {
 		task.run(['clean:build', 'kmc','uglify', 'copy','less','cssmin']);
 	});
+
+    // 启动Debug调试时的本地服务：grunt debug
+    grunt.registerTask('debug', '开启debug模式', function() {
+        task.run(['flexcombo:debug','watch:all']);
+    });
+
+    // 启动Demo调试时的本地服务: grunt demo
+    grunt.registerTask('demo', '开启demo模式', function() {
+        task.run(['flexcombo:demo','watch:all']);
+    });
 
     return grunt.registerTask('default', '',function(type){
 		if (!type) {
