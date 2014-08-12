@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
 	var task = grunt.task;
+	var clamUtil = require('clam-util');
     var SRC = 'lib/';
     grunt.initConfig({
         // 配置文件，参考package.json配置方式，必须设置项是
@@ -9,6 +10,9 @@ module.exports = function(grunt) {
         // author必须是{name: "xxx", email: "xxx"}格式
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*!build time : <%= grunt.template.today("yyyy-mm-dd h:MM:ss TT") %>*/\n',
+
+		// 配置默认分支
+		currentBranch: 'master',
 
         // 对build目录进行清理
         clean: {
@@ -26,7 +30,7 @@ module.exports = function(grunt) {
                         path: '../'
                     }
                 ],
-                depFilePath: 'mods.js',
+                depFilePath: 'map.js',
                 fixModuleName:true,
                 map: [["<%= pkg.name %>/lib/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
             },
@@ -41,6 +45,38 @@ module.exports = function(grunt) {
                 ]
             }
         },
+		// 发布命令
+		exec: {
+			tag: {
+				command: 'git tag publish/<%= currentBranch %>'
+			},
+			publish: {
+				command: 'git push origin publish/<%= currentBranch %>:publish/<%= currentBranch %>'
+			},
+			commit: {
+				command: function (msg) {
+					var command = 'git commit -m "' + grunt.config.get('currentBranch') + ' - ' + grunt.template.today("yyyy-mm-dd HH:MM:ss") + ' ' + msg + '"';
+					return command;
+				}
+			},
+			add: {
+				command: 'git add .'
+			},
+			prepub: {
+				command: 'git push origin daily/<%= currentBranch %>:daily/<%= currentBranch %>'
+			},
+			grunt_publish: {
+				command: 'grunt default:publish'
+			},
+			grunt_prepub: {
+				command: function (msg) {
+					return 'grunt default:prepub:' + msg;
+				}
+			},
+			new_branch: {
+				command: 'git checkout -b daily/<%= currentBranch %>'
+			}
+		},
         /**
          * 对JS文件进行压缩
          * @link https://github.com/gruntjs/grunt-contrib-uglify
@@ -118,16 +154,29 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-						cwd:SRC,
+						cwd: SRC,
                         src: ['**/*.less',
 							'!build/**/*.less',   
 							'!demo/**/*.less'],
                         dest: './build/',
-                        ext: '.less.css'
+                        ext: '.css'
                     }
                 ]
             }
         },
+		sass: {
+			dist: {
+				files: [
+					{
+						expand: true,
+						cwd: SRC,
+						src: ['**/*.scss'],
+						dest: 'build/',
+						ext: '.css'
+					}
+				]
+			}
+		},
 		// 拷贝 CSS 文件
 		copy : {
 			main: {
@@ -157,34 +206,12 @@ module.exports = function(grunt) {
             }
 		},
         cssmin: {
-            scss: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: './build',
-                        src: ['**/*.scss.css', '!**/*.scss-min.css'],
-                        dest: './build',
-                        ext: '.scss-min.css'
-                    }
-                ]
-            },
-            less: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: './build',
-                        src: ['**/*.less.css', '!**/*.less-min.css'],
-                        dest: './build',
-                        ext: '.less-min.css'
-                    }
-                ]
-            },
             main: {
                 files: [
                     {
                         expand: true,
                         cwd: './build',
-                        src: ['**/*.css', '!**/*-min.css','!**/*.less.css','!**/*.scss.css'],
+                        src: ['**/*.css', '!**/*-min.css'],
                         dest: './build',
                         ext: '-min.css'
                     }
@@ -194,8 +221,11 @@ module.exports = function(grunt) {
     });
 
     // 使用到的任务，可以增加其他任务
+	grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-kmc');
+	grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -203,9 +233,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-flexcombo');
     grunt.loadNpmTasks('grunt-contrib-less');
 
-
 	grunt.registerTask('build', '默认构建任务', function() {
-		task.run(['clean:build', 'kmc','uglify', 'copy','less','cssmin']);
+		task.run(['clean:build', 'kmc','uglify', 'copy','less','sass','cssmin']);
 	});
 
     // 启动Debug调试时的本地服务：grunt debug
@@ -218,6 +247,66 @@ module.exports = function(grunt) {
         task.run(['flexcombo:demo','watch:all']);
     });
 
+	// 新建一个分支
+	grunt.registerTask('newbranch', '获取当前最大版本号,创建新的分支', function (type, msg) {
+		var done = this.async();
+		exec('git branch -a & git tag', function (err, stdout, stderr, cb) {
+			var versions = stdout.match(/\d+\.\d+\.\d+/ig),
+				r = clamUtil.getBiggestVersion(versions);
+			if (!r || !versions) {
+				r = '0.1.0';
+			} else {
+				r[2]++;
+				r = r.join('.');
+			}
+			grunt.log.write(('新分支：daily/' + r).green);
+			grunt.config.set('currentBranch', r);
+			task.run(['exec:new_branch']);
+			// 回写入 abc.json 的 version
+			try {
+				pkgJSON = require(path.resolve(process.cwd(), 'package.json'));
+				pkgJSON.version = r;
+				clamUtil.fs.writeJSONFile("package.json", pkgJSON, function (err) {
+					if (err) {
+						console.log(err);
+					} else {
+						console.log("update package.json.");
+					}
+				});
+			} catch (e) {
+				console.log('未找到package.json');
+			}
+			done();
+		});
+	});
+
+	// 预发布
+	grunt.registerTask('prepub', 'pre publish...', function (msg) {
+		var done = this.async();
+		clamUtil.getBranchVersion(function(version){
+			grunt.log.write(('当前分支：' + version).green);
+			grunt.config.set('currentBranch', version);
+			task.run(['exec:add', 'exec:commit:' + msg]);
+			task.run(['exec:prepub']);
+			done();
+		});
+	});
+
+	// 正式发布
+	grunt.registerTask('publish', '组件正式发布', function (msg) {
+		var done = this.async();
+		clamUtil.getBranchVersion(function(version){
+			grunt.log.write(('当前分支：' + version).green);
+			grunt.config.set('currentBranch', version);
+			// task.run(['default']);
+			// task.run(['exec:add', 'exec:commit:' + msg]);
+			// task.run(['exec:prepub']);
+			task.run(['exec:tag', 'exec:publish']);
+			done();
+		});
+	});
+
+	// 默认构建流程
     return grunt.registerTask('default', '',function(type){
 		if (!type) {
 			task.run(['build']);
