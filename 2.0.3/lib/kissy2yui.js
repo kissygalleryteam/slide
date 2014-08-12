@@ -1,6 +1,6 @@
 /*jshint browser:true,devel:true */
 
-KISSY.add('kg/slide/2.0.0/kissy2yui',function(S){
+KISSY.add(function(S){
 
 	"use strict";
 

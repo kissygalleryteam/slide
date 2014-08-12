@@ -1,2 +1,2 @@
-/*!build time : 2014-08-11 11:53:55 AM*/
-KISSY.config("modules",{"kg/slide/2.0.0/slide-util":{requires:["node","json","event"]}});
+/*!build time : 2014-08-12 12:54:50 PM*/
+KISSY.config("modules",{"kg/slide/2.0.2/index":{requires:["node","json","event","anim","ua"]}});

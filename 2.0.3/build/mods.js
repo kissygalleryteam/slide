@@ -1,3 +1,3 @@
 KISSY.config('modules', {
- 'kg/slide/2.0.0/slide-util': { requires: ['node', 'json', 'event']} 
+ 'kg/slide/2.0.2/index': { requires: ['node', 'json', 'event', 'anim', 'ua']} 
 });

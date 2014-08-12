@@ -1,4 +1,4 @@
-KISSY.add('kg/slide/2.0.0/slide-util',function(S){
+KISSY.add(function(S){
 
 	"use strict";
 

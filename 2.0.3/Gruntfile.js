@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
 	var task = grunt.task;
+	var path = require('path');
 	var clamUtil = require('clam-util');
+	var exec = require('child_process').exec;
     var SRC = 'lib/';
     grunt.initConfig({
         // 配置文件，参考package.json配置方式，必须设置项是
@@ -30,16 +32,16 @@ module.exports = function(grunt) {
                         path: '../'
                     }
                 ],
-                depFilePath: 'map.js',
+                depFilePath: 'build/mods.js',
                 fixModuleName:true,
-                map: [["<%= pkg.name %>/lib/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]]
+                map: [
+					["<%= pkg.name %>/", "kg/<%= pkg.name %>/<%= pkg.version %>/"]
+				]
             },
             main: {
                 files: [
                     {
-                        expand: true,
-                        cwd: SRC,
-                        src: [ './*.js' ],
+                        src: [ 'index.js' ],
                         dest: 'build/'
                     }
                 ]
@@ -67,6 +69,9 @@ module.exports = function(grunt) {
 			},
 			grunt_publish: {
 				command: 'grunt default:publish'
+			},
+			doc: {
+				command: 'git push origin daily/<%= currentBranch %>:doc'
 			},
 			grunt_prepub: {
 				command: function (msg) {
@@ -112,15 +117,12 @@ module.exports = function(grunt) {
             debug:{
                 options:{
                     proxyport:8080,
-                    target:'<%= pkg.version %>/build/',
-                    urls:'/s/kissy/gallery/<%= pkg.name %>/<%= pkg.version %>',
-                    port:'80',
+                    target:'build/',
+                    urls:'/kg/<%= pkg.name %>/<%= pkg.version %>',
+                    port:'8081',
                     servlet:'?',
                     separator:',',
                     charset:'gbk', // 输出文件的编码
-                    hosts:{
-                        "g.assets.daily.taobao.net":"10.235.136.37"
-                    },
                     // 默认将"-min"文件映射到源文件
                     filter:{
                         '-min\\.js':'.js'
@@ -130,15 +132,12 @@ module.exports = function(grunt) {
             demo:{
                 options:{
                     proxyport:8080,
-                    target:'<%= pkg.version %>/',
-                    urls:'/s/kissy/gallery/<%= pkg.name %>/<%= pkg.version %>',
-                    port:'80',
-                    proxyHosts:['demo'],
+                    target:'./',
+                    urls:'/kg/<%= pkg.name %>/',
+                    port:'8081',
+                    proxyHosts:['demo','demo.com'],
                     servlet:'?',
                     separator:',',
-                    hosts:{
-                        "g.assets.daily.taobao.net":"10.235.136.37"
-                    },
                     charset:'gbk',
                     filter:{
                         '-min\\.js':'.js'
@@ -170,7 +169,9 @@ module.exports = function(grunt) {
 					{
 						expand: true,
 						cwd: SRC,
-						src: ['**/*.scss'],
+						src: ['**/*.scss',
+							'!build/**/*.scss',   
+							'!demo/**/*.scss'],
 						dest: 'build/',
 						ext: '.css'
 					}
@@ -200,6 +201,10 @@ module.exports = function(grunt) {
             'all': {
                 files: [
 					'./lib/**/*.css',
+					'./lib/**/*.scss',
+					'./lib/**/*.less',
+					'./lib/**/*.js',
+					'index.js',
 					'!./build/**/*'
 				],
                 tasks: [ 'build' ]
@@ -262,11 +267,11 @@ module.exports = function(grunt) {
 			grunt.log.write(('新分支：daily/' + r).green);
 			grunt.config.set('currentBranch', r);
 			task.run(['exec:new_branch']);
-			// 回写入 abc.json 的 version
+			// 回写入 package.json 的 version
 			try {
 				pkgJSON = require(path.resolve(process.cwd(), 'package.json'));
 				pkgJSON.version = r;
-				clamUtil.fs.writeJSONFile("package.json", pkgJSON, function (err) {
+				clamUtil.fs.writeJSONFile(path.resolve(process.cwd(),"package.json"), pkgJSON, function (err) {
 					if (err) {
 						console.log(err);
 					} else {
@@ -281,13 +286,25 @@ module.exports = function(grunt) {
 	});
 
 	// 预发布
-	grunt.registerTask('prepub', 'pre publish...', function (msg) {
+	grunt.registerTask('prepub', '预发布', function (msg) {
 		var done = this.async();
 		clamUtil.getBranchVersion(function(version){
 			grunt.log.write(('当前分支：' + version).green);
 			grunt.config.set('currentBranch', version);
 			task.run(['exec:add', 'exec:commit:' + msg]);
 			task.run(['exec:prepub']);
+			done();
+		});
+	});
+
+	// 发布文档
+	
+	grunt.registerTask('doc', '发布文档', function (msg) {
+		var done = this.async();
+		clamUtil.getBranchVersion(function(version){
+			grunt.log.write(('当前分支：' + version).green);
+			grunt.config.set('currentBranch', version);
+			task.run(['exec:doc']);
 			done();
 		});
 	});
@@ -301,7 +318,7 @@ module.exports = function(grunt) {
 			// task.run(['default']);
 			// task.run(['exec:add', 'exec:commit:' + msg]);
 			// task.run(['exec:prepub']);
-			task.run(['exec:tag', 'exec:publish']);
+			task.run(['exec:doc','exec:tag', 'exec:publish']);
 			done();
 		});
 	});

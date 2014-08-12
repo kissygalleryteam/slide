@@ -11,6 +11,22 @@ by 拔赤，支持移动终端的选项卡切换控件，支持 KISSY MINI，对
 
 ![](http://gtms04.alicdn.com/tps/i4/T103SnFzVaXXa.egfv-257-22.png)
 
+### v2.0.2 Change LOG
+
+新增开发者模式
+
+slide组件怎么调试：
+
+1. checkout [源码](http://gitlab.alibaba-inc.com/kg/slide/tree/master)后，到对应的版本分支，安装npm包:`tnpm install`
+1. demo服务启动:`grunt demo`，在浏览器绑定本机IP:8080，访问`demo.com`
+1. 如果你要调试在其他项目中被引用的代码，则需要开启本地服务的调试模式:`grunt debug`，浏览器绑定本机PI:8080端口，然后修改`src`里的js代码加断点，去引用slide的页面刷新即可进入断点
+
+开发完成后怎么发布？
+
+1. 先新建分支：直接在slide目录下执行`grunt newbranch`
+1. 然后预发布：`grunt prepub`
+1. 最后正式发布：`grunt publish`
+
 ### v1.3 Change LOG
 
 - 支持 KISSY MINI，并保持向下兼容
@@ -20,7 +36,7 @@ by 拔赤，支持移动终端的选项卡切换控件，支持 KISSY MINI，对
 
 	<script>
 		// 回调传入了S（KISSY对象）和Slide构造器
-		KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+		KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 			// 这里调用Slide
 		});
 	</script>
@@ -63,7 +79,7 @@ Slide依赖典型的HTML结构
 
 样例代码：
 
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 		// 直接指定id，也可以指定选择器，比如："#id .className"
 		var s = new Slide('JSlide');
 	});
@@ -249,10 +265,6 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 是否在webkit浏览器中开启硬件加速，默认为true，因为webkit在各平台中可能有bug，常需要临时性关闭移动设备中的硬件加速。
 
-*before_switch*（function）
-
-指定当beforeSwitch事件（“切换至”事件）触发时执行的回调函数，回调函数返回false可以阻止切换事件的发生。同时，before_switch还可以取布尔值，取true时正常触发切换事件，取false时阻止切换事件。该属性默认为true。代码示例参见demo/d4.html和demo/d5.html。
-
 <hr class="smooth" />
 
 ### 事件
@@ -367,6 +379,14 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 初始化SubLayer，无参数，（目前触屏模式下默认关闭）
 
+*getWrappedIndex*
+
+得到当前帧的“表示索引”，帧的索引有两个，一个是物理帧索引，用`self.currentTab`表示，一个是表示出来的帧索引，用`self.getWrappedIndex(c.currentTab)`来得到，这在多帧滚动和跑马灯时非常有用
+
+*isSlideVisible* 
+
+slide是否在网页可见区域
+
 <hr class="smooth" />
 
 # Examples 
@@ -375,7 +395,7 @@ subLayer的className，默认值为tab-animlayer，未实现，默认用alt="sub
 
 JS代码：
 
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 		new Slide('Jtab',{
 			eventType:'mouseenter' // 鼠标触碰切换
 			// 注意，KISSY MINI 不支持 mouseenter事件
@@ -395,7 +415,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 
 		var s = new Slide('JSlide',{
 			eventType:'click',//点击触碰点切换
@@ -425,7 +445,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 		var C = new Slide('slides',{
 			autoSlide:true,
 			effect:'vSlide', //垂直切换
@@ -441,7 +461,7 @@ JS代码：
 
 JS代码：
 
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 		new Slide('JSlide',{
 			effect:'hSlide', //水平切换
 			carousel:true, // 跑马灯
@@ -498,7 +518,7 @@ HTML代码：
 JS 代码：
 
 	<script>
-	KISSY.use('kg/slide/2.0.0/',function(S,Slide){
+	KISSY.use('kg/slide/2.0.2/',function(S,Slide){
 		new Slide('slides',{
 			autoSlide:false,
 			effect:'hSlide',
