@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
 	var task = grunt.task;
+	var path = require('path');
 	var clamUtil = require('clam-util');
 	var exec = require('child_process').exec;
     var SRC = 'lib/';
@@ -263,7 +264,7 @@ module.exports = function(grunt) {
 			grunt.log.write(('新分支：daily/' + r).green);
 			grunt.config.set('currentBranch', r);
 			task.run(['exec:new_branch']);
-			// 回写入 abc.json 的 version
+			// 回写入 package.json 的 version
 			try {
 				pkgJSON = require(path.resolve(process.cwd(), 'package.json'));
 				pkgJSON.version = r;
