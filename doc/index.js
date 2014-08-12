@@ -1,6 +1,6 @@
 
 
-KISSY.add('kg/index',function(S,BSlide){
+KISSY.add(function(S,BSlide){
 
 	return BSlide;
 

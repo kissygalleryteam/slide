@@ -1,6 +1,6 @@
 /*jshint browser:true,devel:true */
 
-KISSY.add('kg/lib/kissy2yui',function(S){
+KISSY.add(function(S){
 
 	"use strict";
 

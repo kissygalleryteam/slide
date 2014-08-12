@@ -1,13 +1,13 @@
 /*
 combined files : 
 
-kg/slide/2.0.0/slide-util
-kg/slide/2.0.0/kissy2yui
-kg/slide/2.0.0/base
-kg/slide/2.0.0/index
+kg/slide/2.0.2/lib/slide-util
+kg/slide/2.0.2/lib/kissy2yui
+kg/slide/2.0.2/lib/base
+kg/slide/2.0.2/index
 
 */
-KISSY.add('kg/slide/2.0.0/slide-util',function(S){
+KISSY.add('kg/slide/2.0.2/lib/slide-util',function(S){
 
 	"use strict";
 
@@ -143,7 +143,7 @@ KISSY.add('kg/slide/2.0.0/slide-util',function(S){
 
 /*jshint browser:true,devel:true */
 
-KISSY.add('kg/slide/2.0.0/kissy2yui',function(S){
+KISSY.add('kg/slide/2.0.2/lib/kissy2yui',function(S){
 
 	"use strict";
 
@@ -251,7 +251,7 @@ KISSY.add('kg/slide/2.0.0/kissy2yui',function(S){
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add('kg/slide/2.0.0/base',function(S){
+KISSY.add('kg/slide/2.0.2/lib/base',function(S){
 
 	"use strict";
 
@@ -1008,11 +1008,21 @@ KISSY.add('kg/slide/2.0.0/base',function(S){
 				self.relocateCurrentTab();
 			});
 
-			// 绑定判断switch发生的时机
 			self.on('beforeSwitch',function(o){
-				if(this.layerSlide && this.isAming()){
+                if(typeof self.before_switch == 'function'){
+                    self._executeSwitch = self.before_switch();
+                    return self._executeSwitch;
+                } else if (typeof self.before_switch == 'boolean'){
+                    self._executeSwitch = self.before_switch;
+                    return self.before_switch;
+                } else {
+                    self._executeSwitch = true;
+                    return true;
+                }
+
+				/*if(this.layerSlide && this.isAming()){
 					return false;
-				}
+				}*/
 			});
 
 			//终端事件触屏事件绑定
@@ -1660,7 +1670,7 @@ KISSY.add('kg/slide/2.0.0/base',function(S){
 				triggerSelector:'li',
 				contentClass:	'tab-content',
 				pannelClass:	'tab-pannel',
-				// before_switch:	new Function,
+				before_switch:	true, //added by fengdao
 				carousel:		false, // 不支持
 				reverse:		false,
 				touchmove:		true,
@@ -2099,14 +2109,19 @@ KISSY.add('kg/slide/2.0.0/base',function(S){
 			};
 
 			var doSwitch = function(){
-				
+                //console.log("self.before_switch:" + self.before_switch);
 				var goon = self.fire('beforeSwitch', {
 					index:index,
 					navnode:self.tabs.item(index),
 					pannelnode:self.pannels.item(index)
 				});
-
-				if(goon !== false){
+                //console.log(goon._executeSwitch);
+                /*
+                枫刀修改：如果goon._executeSwitch（即self._executeSwitch）不是false（可以是true,或其他值,或不指定），
+                则触发切换事件（switch事件）；否则阻止切换事件
+                 */
+				if(goon._executeSwitch !== false){
+                    //console.log(goon);
 					//发生go的时候首先判断是否需要整理空间的长宽尺寸
 					//self.renderSize(index);
 
@@ -2177,18 +2192,18 @@ KISSY.add('kg/slide/2.0.0/base',function(S){
 	return BSlide;
 
 },{
-	requires:['node','json','event','anim','ua','./slide-util','./kissy2yui']	
+	requires:['node','json','event','anim','ua','./slide-util','./kissy2yui']
 });
 
 
 
 
-KISSY.add('kg/slide/2.0.0/index',function(S,BSlide){
+KISSY.add('kg/slide/2.0.2/index',function(S,BSlide){
 
 	return BSlide;
 
 },{
-	requires:['./base']	
+	requires:['./lib/base']
 });
 
 
@@ -2236,6 +2251,7 @@ KISSY.add('kg/slide/2.0.0/index',function(S,BSlide){
  * 								return document.body.offsetWidth;
  * 							}
  * 						});
+ * 		before_switch:{function}指定当beforeSwitch事件（“切换至”事件）触发时执行的回调函数，回调函数返回false可以阻止切换事件的发生。同时，before_switch还可以取布尔值，取true时正常触发切换事件，取false时阻止切换事件。该属性默认为true。代码示例参见demo/d4.html和demo/d5.html。
  *
  *
  * 	@event 事件

@@ -9,7 +9,7 @@
 
 /*jshint smarttabs:true,browser:true,devel:true,sub:true,evil:true */
 
-KISSY.add('kg/lib/base',function(S){
+KISSY.add(function(S){
 
 	"use strict";
 
@@ -766,12 +766,6 @@ KISSY.add('kg/lib/base',function(S){
 				self.relocateCurrentTab();
 			});
 
-			/*
-			* 枫刀修改：绑定beforeSwitch事件。如果self.before_switch是一个回调函数，
-			* 则执行并返回该回调函数的返回值；如果self.before_switch是一个布尔值，则
-			* 返回self.before_switch；如果未指定self.before_switch，则返回true。
-			* self._executeSwitch属性用于临时保存回调函数的返回值。
-			* */
 			self.on('beforeSwitch',function(o){
                 if(typeof self.before_switch == 'function'){
                     self._executeSwitch = self.before_switch();
@@ -1361,11 +1355,10 @@ KISSY.add('kg/lib/base',function(S){
 			});
 
 			self.on('beforeSwitch',function(o){
-                //return self.before_switch();
-				/*if(o.index === self.currentTab){
+				if(o.index === self.currentTab){
 					return false;
 				}
-				self.subLayerRunin(o.index);*/
+				self.subLayerRunin(o.index);
 			});
 
 			self.on('beforeTailSwitch',function(o){
