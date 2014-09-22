@@ -1821,7 +1821,10 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 				'fade':function(index){
 					//重写fade效果逻辑
 					//modified by huya
-					var _curr = self.currentTab;
+					//
+					//fix by miaojing 当nav快速切换时，动画已经被中途取消掉，
+					//但是最后一次动画（不是上一帧cuttrenTab）的opactiy等状态还没有重置回来
+					var _curr = self.lastFadeIndex || self.currentTab;
 
 					//动画开始之前的动作
 					self.pannels.item(index).setStyle({
@@ -1835,7 +1838,7 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 					self.anim = S.one(self.pannels.item(index)).animate({
 						opacity: 1
 					},self.speed,self.easing,function(){
-
+						self.lastFadeIndex = index;
 						//console.log(_curr);
 						self.pannels.item(_curr).setStyle('zIndex', 0);
 						self.pannels.item(index).setStyle('zIndex', 1);
@@ -1844,11 +1847,13 @@ KISSY.add('gallery/slide/1.3/base',function(S){
 							'display':'none'	
 						});
 						afterSwitch();
+						//by miaojing afterSwich事件里面已经fire过afterSwitch事件了 下面不用了
+						/*
 						self.fire('afterSwitch',{
 							index: index,
 							navnode: self.tabs.item(self.getWrappedIndex(index)),
 							pannelnode: self.pannels.item(index)
-						});
+						});*/
 					});
 
 
