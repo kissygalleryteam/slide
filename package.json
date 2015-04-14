@@ -1,16 +1,19 @@
 {
-    "name": "cutter",
-    "version": "1.0.0",
-    "devDependencies": {
-        "grunt-contrib-uglify": "~0.2.0",
-        "grunt": "~0.4.1",
-        "grunt-kmc": "~0.1.1",
-		"grunt-flexcombo":"",
-        "grunt-sass":"~0.10.0",
-        "grunt-contrib-less": "~0.5.0",
-		"grunt-contrib-copy": "",
-		"grunt-contrib-clean": "~0.4.0",
-		"grunt-contrib-cssmin": "~0.5.0",
-		"grunt-contrib-watch": ""
-    }
+  "name": "slide",
+  "version": "3.0.0",
+  "private": true,
+  "devDependencies": {
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt": "~0.4.1",
+    "grunt-kmc": "~0.1.1",
+    "grunt-contrib-less": "~0.5.0",
+    "grunt-sass": "~0.10.0",
+    "grunt-contrib-watch": "",
+    "grunt-flexcombo": "",
+    "grunt-contrib-copy": "",
+    "grunt-contrib-clean": "~0.4.0",
+    "clam-util": "",
+    "grunt-exec": "",
+    "grunt-contrib-cssmin": "~0.5.0"
+  }
 }
