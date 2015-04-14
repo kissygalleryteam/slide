@@ -70,6 +70,9 @@ module.exports = function(grunt) {
 			grunt_publish: {
 				command: 'grunt default:publish'
 			},
+			doc: {
+				command: 'git push origin daily/<%= currentBranch %>:doc'
+			},
 			grunt_prepub: {
 				command: function (msg) {
 					return 'grunt default:prepub:' + msg;
@@ -283,13 +286,25 @@ module.exports = function(grunt) {
 	});
 
 	// 预发布
-	grunt.registerTask('prepub', 'pre publish...', function (msg) {
+	grunt.registerTask('prepub', '预发布', function (msg) {
 		var done = this.async();
 		clamUtil.getBranchVersion(function(version){
 			grunt.log.write(('当前分支：' + version).green);
 			grunt.config.set('currentBranch', version);
 			task.run(['exec:add', 'exec:commit:' + msg]);
 			task.run(['exec:prepub']);
+			done();
+		});
+	});
+
+	// 发布文档
+	
+	grunt.registerTask('doc', '发布文档', function (msg) {
+		var done = this.async();
+		clamUtil.getBranchVersion(function(version){
+			grunt.log.write(('当前分支：' + version).green);
+			grunt.config.set('currentBranch', version);
+			task.run(['exec:doc']);
 			done();
 		});
 	});
@@ -303,7 +318,7 @@ module.exports = function(grunt) {
 			// task.run(['default']);
 			// task.run(['exec:add', 'exec:commit:' + msg]);
 			// task.run(['exec:prepub']);
-			task.run(['exec:tag', 'exec:publish']);
+			task.run(['exec:doc','exec:tag', 'exec:publish']);
 			done();
 		});
 	});
