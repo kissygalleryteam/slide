@@ -1,6 +1,5 @@
 ## slide
 
-<<<<<<< HEAD
 * 版本：2.0.2
 * 教程：[http://gallery.kissyui.com/slide/2.0.2/guide/index.html](http://gallery.kissyui.com/slide/2.0.2/guide/index.html)
 * demo：[http://gallery.kissyui.com/slide/2.0.2/demo/index.html](http://gallery.kissyui.com/slide/2.0.2/demo/index.html)
@@ -39,15 +38,6 @@
 兼容kissy5 by@修名
 
 ### V2.0.2
-=======
-* 版本：2.0.3
-* 教程：[http://gallery.kissyui.com/slide/2.0.3/guide/index.html](http://gallery.kissyui.com/slide/2.0.3/guide/index.html)
-* demo：[http://gallery.kissyui.com/slide/2.0.3/demo/index.html](http://gallery.kissyui.com/slide/2.0.3/demo/index.html)
-
-## changelog
-
-### V2.0.3
->>>>>>> 3c46bef9bece7708137eb35eec6d275b81cd5b2d
 
 迁移 + bugfix
 
