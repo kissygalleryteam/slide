@@ -1,6 +1,6 @@
 {
   "name": "slide",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "private": true,
   "devDependencies": {
     "grunt-contrib-uglify": "~0.2.0",

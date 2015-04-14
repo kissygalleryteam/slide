@@ -11,6 +11,12 @@ by 拔赤，支持移动终端的选项卡切换控件，支持 KISSY MINI，对
 
 ![](http://gtms04.alicdn.com/tps/i4/T103SnFzVaXXa.egfv-257-22.png)
 
+### v3.0.0 Change Log
+
+- 兼容kissy5
+
+- 去掉入侵式的函数扩展
+
 ### v2.0.2 Change LOG
 
 新增开发者模式
